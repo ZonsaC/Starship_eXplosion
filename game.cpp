@@ -1,4 +1,3 @@
-
 #include "game.h"
 
 //Private functions
@@ -8,8 +7,8 @@ void Game::initVariables()
 }
 void Game::initWindow() 
 {
-    this->videoMode.height = 600;
-    this->videoMode.width = 800;
+    this->videoMode.width = 1280;
+    this->videoMode.height = 720;
 
     this->window = new sf::RenderWindow(this->videoMode, "Window", sf::Style::Titlebar | sf::Style::Close);
 }
