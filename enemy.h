@@ -12,8 +12,9 @@ class enemy
 {
     private:
     
+    sf::Texture texture;
     sf::Sprite asteroid;
-    sf::Texture spriteAsteroid;
+    
 
     void enemy::initenemy();
     

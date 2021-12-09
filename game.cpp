@@ -77,6 +77,7 @@ void Game::render()
     //Draw game objects
 
     this->window->display();
+    
 }
 
 
