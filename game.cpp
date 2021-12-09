@@ -1,6 +1,7 @@
 #include "game.h"
 #include "starship.h"
 
+
 //Private functions
 void Game::initVariables() 
 {
@@ -78,6 +79,7 @@ void Game::render()
     starship::drawShip(*window);
 
     this->window->display();
+    
 }
 
 
