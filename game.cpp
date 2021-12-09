@@ -9,8 +9,11 @@ void Game::initVariables()
 }
 void Game::initWindow() 
 {
+
     this->videoMode.width = 1280;
     this->videoMode.height = 720;
+    
+    starship::windowValues(videoMode.width, videoMode.height);
 
     this->window = new sf::RenderWindow(this->videoMode, "Window", sf::Style::Titlebar | sf::Style::Close);
 }

@@ -21,7 +21,7 @@ private:
     void controlShip();
 
 public:
-
+    void windowValues(int width, int height);
     void renderShip(sf::RenderTarget& target);
     void updateShip();
 
