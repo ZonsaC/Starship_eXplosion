@@ -17,7 +17,7 @@ class enemy
 
     
 
-    void enemy::initenemy();
+    void initEnemy();
     
     public:
 

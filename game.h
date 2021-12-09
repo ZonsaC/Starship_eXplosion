@@ -28,7 +28,7 @@ private:
     //Private function
     void initVariables();
     void initWindow();
-    starship* ship;
+
 public:
     //Constructors / Destructors
     Game();
