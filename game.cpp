@@ -1,5 +1,5 @@
-
 #include "game.h"
+
 
 //Private functions
 void Game::initVariables() 
