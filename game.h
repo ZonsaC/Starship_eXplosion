@@ -8,24 +8,26 @@
 #include <SFML/Audio.hpp>
 
 #include <iostream>
+#include "starship.h"
 
 /*
     Class that acts as the game engine.
     Wrapper class.
 */
 
-class Game
+class Game : public starship
 {
 private:
-    //Variables
     //Window
     sf::RenderWindow* window;
     sf::VideoMode videoMode;
     sf::Event ev;
 
+
     //Private function
     void initVariables();
     void initWindow();
+    starship* ship;
 public:
     //Constructors / Destructors
     Game();

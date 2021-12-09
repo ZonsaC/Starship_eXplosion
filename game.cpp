@@ -1,4 +1,5 @@
 #include "game.h"
+#include "starship.h"
 
 //Private functions
 void Game::initVariables() 
@@ -74,6 +75,7 @@ void Game::render()
     this->window->clear(sf::Color(255, 0, 0, 255));
 
     //Draw game objects
+    starship::drawShip(*window);
 
     this->window->display();
 }
