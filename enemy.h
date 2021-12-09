@@ -19,7 +19,7 @@ class enemy
 
     void initEnemy();
 
-    void updateAsteroids();
+    
     
     public:
 
@@ -27,6 +27,7 @@ class enemy
         ~enemy();
 
         void renderAsteroids(sf::RenderTarget& target);
+        void updateAsteroids();
 
 
 };
