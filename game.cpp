@@ -76,7 +76,7 @@ void Game::render()
     this->window->clear(sf::Color(255, 0, 0, 255));
 
     //Draw game objects
-    starship::drawShip(*window);
+    starship::renderShip(*window);
     enemy::renderAsteroids(*window);
     this->window->display();
     

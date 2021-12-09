@@ -21,7 +21,7 @@ void starship::initShip()
     
 }
 
-void starship::drawShip(sf::RenderTarget& target) 
+void starship::renderShip(sf::RenderTarget& target) 
 {
     target.draw(ship);
 }

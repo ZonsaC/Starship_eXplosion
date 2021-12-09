@@ -21,7 +21,7 @@ private:
 
 public:
 
-    void drawShip(sf::RenderTarget& target);
+    void renderShip(sf::RenderTarget& target);
 
     starship();
     ~starship();
