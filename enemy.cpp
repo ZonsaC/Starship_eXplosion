@@ -19,9 +19,12 @@ void enemy::renderAsteroids(sf::RenderTarget& target)
 void enemy::initEnemy(){
     texture.loadFromFile("assets/graphics/enemy.png");
     asteroid.setTexture(texture);
+    //asteroid.setPosition();
 }
 
 void enemy::updateAsteroids() 
 {
     
 }
+
+

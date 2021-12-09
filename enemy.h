@@ -28,6 +28,7 @@ class enemy
 
         void renderAsteroids(sf::RenderTarget& target);
         void updateAsteroids();
+        void spawnAsteroids();
 
 
 };
