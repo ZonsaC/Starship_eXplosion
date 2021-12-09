@@ -3,6 +3,16 @@
 
 #include "game.h"
 
+class starship
+{
+private:
+    
+public:
+    starship();
+    ~starship();
+};
+
+
 
 
 
