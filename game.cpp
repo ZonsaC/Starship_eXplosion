@@ -59,6 +59,9 @@ void Game::update()
 {
     //Event polling
     this->pollEvent();
+    starship::updateShip();
+    enemy::updateAsteroids();
+
 }
 
 void Game::render() 

@@ -22,6 +22,7 @@ private:
 public:
 
     void renderShip(sf::RenderTarget& target);
+    void updateShip();
 
     starship();
     ~starship();
