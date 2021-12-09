@@ -1,5 +1,6 @@
 #include "game.h"
-
+#include "enemy.h"
+#include "starship.h"
 
 int main()
 {

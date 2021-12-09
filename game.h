@@ -7,6 +7,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 
+#include <iostream>
+
 /*
     Class that acts as the game engine.
     Wrapper class.
