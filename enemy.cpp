@@ -20,3 +20,8 @@ void enemy::initEnemy(){
     texture.loadFromFile("assets/graphics/enemy.png");
     asteroid.setTexture(texture);
 }
+
+void enemy::updateAsteroids() 
+{
+    
+}

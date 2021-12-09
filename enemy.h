@@ -18,6 +18,8 @@ class enemy
     
 
     void initEnemy();
+
+    void updateAsteroids();
     
     public:
 
