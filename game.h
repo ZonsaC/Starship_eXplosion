@@ -19,10 +19,6 @@
 class Game : public starship, public enemy
 {
 private:
-    //Window
-    sf::RenderWindow* window;
-    sf::VideoMode videoMode;
-    sf::Event ev;
 
 
     //Private function
@@ -30,6 +26,12 @@ private:
     void initWindow();
 
 public:
+    //Window
+    sf::RenderWindow* window;
+    sf::VideoMode videoMode;
+    sf::Event ev;
+
+
     //Constructors / Destructors
     Game();
     virtual ~Game();
