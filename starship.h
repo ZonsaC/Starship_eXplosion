@@ -8,16 +8,17 @@
 #include <SFML/Audio.hpp>
 
 #include <iostream>
-class Game;
+
 
 class starship
 {
 private:
-
     sf::Sprite ship;
     sf::Texture texture;
 
     void initShip();
+
+    void controlShip();
 
 public:
 
