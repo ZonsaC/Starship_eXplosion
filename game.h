@@ -9,13 +9,14 @@
 
 #include <iostream>
 #include "starship.h"
+#include "enemy.h"
 
 /*
     Class that acts as the game engine.
     Wrapper class.
 */
 
-class Game : public starship
+class Game : public starship, public enemy
 {
 private:
     //Window

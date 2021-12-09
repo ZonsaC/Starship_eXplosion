@@ -14,13 +14,17 @@ class enemy
     
     sf::Texture texture;
     sf::Sprite asteroid;
+
     
 
     void enemy::initenemy();
     
     public:
+
         enemy();
         ~enemy();
+
+        void renderAsteroids(sf::RenderTarget& target);
 
 
 };
