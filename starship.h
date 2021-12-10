@@ -12,21 +12,40 @@
 
 class starship
 {
+public:
+    sf::VideoMode videoMode;
+
+    void windowValues(int, int);
+    void spawnBullet();
+
+    void renderShip(sf::RenderTarget& target);
+    void renderBullet(sf::RenderTarget& target);
+    void updateShip();
+    void updateBullet();
+
+
+    starship();
+    ~starship();
+
 private:
     sf::Sprite ship;
     sf::Texture texture;
 
+    sf::Sprite bullet;
+    sf::Texture bulletTexture;
+    std::vector<sf::Sprite> bullets;
+
+    bool spawnBulletBool = false;
+    int xMovement;
+    int yMovement;
+
+
     void initShip();
+    void initBullet();
 
     void controlShip();
 
-public:
-    void windowValues(int width, int height);
-    void renderShip(sf::RenderTarget& target);
-    void updateShip();
 
-    starship();
-    ~starship();
 };
 
 

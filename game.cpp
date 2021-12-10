@@ -83,6 +83,7 @@ void Game::render()
 
     //Draw game objects
     starship::renderShip(*window);
+    starship::renderBullet(*window);
     enemy::renderAsteroids(*window);
     this->window->display();
     
