@@ -2,8 +2,10 @@
 #include "enemy.h"
 #include "starship.h"
 
+
 int main()
 {
+    srand(time(NULL));
     //Init Game engine
     Game game;
 

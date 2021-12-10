@@ -8,6 +8,7 @@
 #include <SFML/Audio.hpp>
 
 #include <iostream>
+#include <ctime>
 #include "starship.h"
 #include "enemy.h"
 

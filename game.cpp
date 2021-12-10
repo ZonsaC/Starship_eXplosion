@@ -15,7 +15,7 @@ void Game::initWindow()
     
 
     starship::windowValues(videoMode.width, videoMode.height);
-
+    enemy::windowValues(videoMode.width, videoMode.height);
     this->window = new sf::RenderWindow(this->videoMode, "Window", sf::Style::Titlebar | sf::Style::Close);
 
     this->texture.loadFromFile("assets/graphics/background.png");
@@ -29,7 +29,7 @@ Game::Game()
 {
     this->initVariables();
     this->initWindow();
-
+    
 }
 
 Game::~Game()

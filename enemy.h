@@ -1,6 +1,7 @@
 #ifndef __ENEMY_H
 #define __ENEMY_H
 
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
@@ -12,23 +13,29 @@ class enemy
 {
     private:
     
+
+    sf::VideoMode videoMode;
     sf::Texture texture;
     sf::Sprite asteroid;
-
-    
-
-    void initEnemy();
+    std::vector<sf::Sprite> asteroids;
+    int maxAsteroid = 4;
+    int length = 0;
+    int asteroidSpawnTimer = 0;
+    int asteroidSpawnTimerMax = 100;
+    void initAsteroid();
 
     
     
     public:
-
+        void windowValues(int, int);
         enemy();
         ~enemy();
-
-        void renderAsteroids(sf::RenderTarget& target);
+        
+        void spawnAsteroid();
         void updateAsteroids();
-        void spawnAsteroids();
+        void renderAsteroids(sf::RenderTarget& target);
+        
+        
 
 
 };
