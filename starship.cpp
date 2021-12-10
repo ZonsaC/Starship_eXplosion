@@ -18,6 +18,8 @@ starship::~starship()
 
 void starship::initVariables() 
 {
+    prevTimeBullet = 0;
+    attackSpeed = 1;
     spawnBulletBool = false;
     acceleration = 0.000025f;
     speedMax = 0.1f;
@@ -78,12 +80,12 @@ void starship::controlShip()
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false)
     {
-        bullet.setRotation(ship.getRotation());
+        
+        prevTimeBullet = time.asSeconds();
 
         spawnBulletBool = true;
 
         spawnBullet();
-
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
     //Break
@@ -106,7 +108,10 @@ void starship::windowValues(int width, int height)
 
 void starship::spawnBullet() 
 {
+    bullet.setRotation(ship.getRotation());
     bullet.setPosition(ship.getPosition().x, ship.getPosition().y);
+
+    bullets.push_back(bullet);
 }
 
 
@@ -120,7 +125,8 @@ void starship::updateShip()
 
 void starship::updateBullet() 
 {
-    bullet.move(sin((bullet.getRotation() / 180) * 3.14) / 5, -1 * cos((bullet.getRotation() / 180) * 3.14) / 5);
+    for(int i = 0; i < bullets.size(); i++)
+        bullets[i].move(sin((bullets[i].getRotation() / 180) * 3.14) / 5, -1 * cos((bullets[i].getRotation() / 180) * 3.14) / 5);
 }
 
 
@@ -128,11 +134,12 @@ void starship::updateBullet()
 
 void starship::renderShip(sf::RenderTarget& target) 
 {
-    //Renders Ship
-    target.draw(ship);
-}
+    //Render Bullets
+    for(auto &e : this->bullets)
+    {
+        target.draw(e);
+    }
 
-void starship::renderBullet(sf::RenderTarget& target) 
-{
-    target.draw(bullet);
+    //Render Ship
+    target.draw(ship);
 }

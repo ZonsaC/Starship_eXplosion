@@ -34,7 +34,10 @@ private:
     sf::Sprite bullet;
     sf::Texture bulletTexture;
     std::vector<sf::Sprite> bullets;
+    sf::Time time;
 
+    int prevTimeBullet;
+    int attackSpeed;
     bool spawnBulletBool;
     float speedMax;
     float acceleration;
