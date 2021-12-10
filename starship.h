@@ -50,6 +50,7 @@ private:
     float speedMax;
     float acceleration;
     float speedCur;
+    float tempRotation;
 
     //Init
     void initVariables();

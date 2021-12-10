@@ -10,6 +10,7 @@ starship::starship()
     initVariables();
     initShip();
     initBullet();
+    void windowValues(int , int );
 }
 
 starship::~starship() 
@@ -22,6 +23,7 @@ void starship::initVariables()
     // Dont change
     spawnBulletBool = false;
     speedCur = 0.f;
+    tempRotation = 0.f;
 
     //Parameters
     acceleration = 0.00001f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
@@ -76,14 +78,6 @@ void starship::controlShip()
         ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
     }    
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    {
-        if(speedCur > speedMax * -1)
-            speedCur -= acceleration;
-
-        ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
-    }
-
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false)
     {
         
@@ -95,14 +89,17 @@ void starship::controlShip()
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
     //Breaking
-    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        tempRotation = ship.getRotation();
+
+    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         if(speedCur > 0)
             speedCur -= acceleration;
         if(speedCur < 0)
             speedCur += acceleration;
 
-        ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
+        ship.move(sin((tempRotation / 180) * 3.14) * speedCur, -1 * cos((tempRotation / 180) * 3.14) * speedCur);
     }
 }
 
