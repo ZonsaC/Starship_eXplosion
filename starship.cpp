@@ -6,6 +6,7 @@
 
 starship::starship() 
 {
+    initVariables();
     initShip();
     initBullet();
 }
@@ -13,6 +14,14 @@ starship::starship()
 starship::~starship() 
 {
     
+}
+
+void starship::initVariables() 
+{
+    spawnBulletBool = false;
+    acceleration = 0.000025f;
+    speedMax = 0.1f;
+    speedCur = 0.f;
 }
 
 //Init Stuff
@@ -43,20 +52,30 @@ void starship::controlShip()
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        ship.rotate(-1 * 0.04);
+        ship.rotate(-1 * 0.06);
     }
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        ship.rotate(1 * 0.04);
+        ship.rotate(1 * 0.06);
     }
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        ship.move(sin((ship.getRotation() / 180) * 3.14) / 10, -1 * cos((ship.getRotation() / 180) * 3.14) / 10);
-    }
+        if(speedCur < speedMax)
+            speedCur += acceleration;
+
+        ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
+    }    
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
-        ship.move(-1 * sin((ship.getRotation() / 180) * 3.14) / 10, cos((ship.getRotation() / 180) * 3.14) / 10);
+        if(speedCur > speedMax * -1)
+            speedCur -= acceleration;
+
+        ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
     }
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false)
     {
         bullet.setRotation(ship.getRotation());
@@ -65,9 +84,18 @@ void starship::controlShip()
 
         spawnBullet();
 
-    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-        spawnBulletBool = false;
+    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
+    //Break
+    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    {
+        if(speedCur > 0)
+            speedCur -= acceleration;
+        if(speedCur < 0)
+            speedCur += acceleration;
+
+        ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
+    }
 }
 
 void starship::windowValues(int width, int height) 

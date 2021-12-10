@@ -16,6 +16,8 @@ void Game::initWindow()
     starship::windowValues(videoMode.width, videoMode.height);
 
     this->window = new sf::RenderWindow(this->videoMode, "Window", sf::Style::Titlebar | sf::Style::Close);
+
+    //this->window->setFramerateLimit(140);
 }
 
 
@@ -79,7 +81,7 @@ void Game::render()
         Renders the game objects.
     */
 
-    this->window->clear(sf::Color(255, 0, 0, 255));
+    this->window->clear(sf::Color(190, 63, 63, 255));
 
     //Draw game objects
     starship::renderShip(*window);
