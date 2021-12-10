@@ -30,6 +30,8 @@ public:
     sf::RenderWindow* window;
     sf::VideoMode videoMode;
     sf::Event ev;
+    sf::Texture texture;
+    sf::Sprite background;
 
 
     //Constructors / Destructors

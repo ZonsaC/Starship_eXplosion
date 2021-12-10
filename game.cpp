@@ -13,10 +13,13 @@ void Game::initWindow()
     this->videoMode.width = 1280;
     this->videoMode.height = 720;
     
+
     starship::windowValues(videoMode.width, videoMode.height);
 
     this->window = new sf::RenderWindow(this->videoMode, "Window", sf::Style::Titlebar | sf::Style::Close);
 
+    this->texture.loadFromFile("assets/graphics/background.png");
+    background.setTexture(texture);
     //this->window->setFramerateLimit(140);
 }
 
@@ -84,6 +87,7 @@ void Game::render()
     this->window->clear(sf::Color(190, 63, 63, 255));
 
     //Draw game objects
+    this->window->draw(background);
     starship::renderShip(*window);
     enemy::renderAsteroids(*window);
     this->window->display();
