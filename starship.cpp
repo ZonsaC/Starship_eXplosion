@@ -8,9 +8,7 @@ starship::starship()
 {
     //Init
     initVariables();
-    initShip();
     initBullet();
-    void windowValues(int , int );
 }
 
 starship::~starship() 
@@ -26,7 +24,7 @@ void starship::initVariables()
     tempRotation = 0.f;
 
     //Parameters
-    acceleration = 0.00001f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
+    acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
     speedMax = 0.1f; //Max Speed the Ship travels -- Normal 0.1f
 
     
@@ -43,7 +41,7 @@ void starship::initShip()
 
     //Change Origin
     ship.setOrigin(ship.getGlobalBounds().width / 2, ship.getGlobalBounds().height / 2);
-    ship.setPosition(500 , 500);
+    ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
 }
 
 void starship::initBullet() 
@@ -107,6 +105,8 @@ void starship::windowValues(int width, int height)
 {
     starship::videoMode.width = width;
     starship::videoMode.height = height;
+
+    initShip();
 }
 
 void starship::spawnBullet() 
@@ -124,6 +124,10 @@ void starship::updateShip()
 {
     controlShip();
     updateBullet();
+
+    if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
+        ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
+    }
 }
 
 void starship::updateBullet() 
