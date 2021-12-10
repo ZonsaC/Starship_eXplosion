@@ -2,10 +2,10 @@ Hey,
 
 Todo:
 - Raumschiff
-    - Physics
-    - Controls
-    - Schießen
-    - Collision mit Wand
+    - Physics                   -- Done
+    - Controls                  -- Done
+    - Schießen                  -- Done
+    - Collision mit Wand        -- Done
 - Enemies
     - Spawning
     - Explosion

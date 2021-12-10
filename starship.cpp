@@ -8,9 +8,7 @@ starship::starship()
 {
     //Init
     initVariables();
-    initShip();
     initBullet();
-    void windowValues(int , int );
 }
 
 starship::~starship() 
@@ -22,13 +20,15 @@ void starship::initVariables()
 {
     // Dont change
     spawnBulletBool = false;
+    attackV = false;
     speedCur = 0.f;
     tempRotation = 0.f;
+    attack = 0.f;
 
     //Parameters
-    acceleration = 0.00001f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
+    acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
     speedMax = 0.1f; //Max Speed the Ship travels -- Normal 0.1f
-
+    attackSpeed = 2000.f; //Max Attackspeed - HigherNumber = LongerWaittime 
     
 }
 
@@ -43,7 +43,7 @@ void starship::initShip()
 
     //Change Origin
     ship.setOrigin(ship.getGlobalBounds().width / 2, ship.getGlobalBounds().height / 2);
-    ship.setPosition(500 , 500);
+    ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
 }
 
 void starship::initBullet() 
@@ -78,14 +78,24 @@ void starship::controlShip()
         ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
     }    
 
+    if(attack >= attackSpeed)
+        {
+            attackV = true;
+        } else 
+        {
+            attack += 1;
+            attackV = false;
+        }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false)
     {
-        
-        prevTimeBullet = time.asSeconds();
-
         spawnBulletBool = true;
 
-        spawnBullet(); 
+        if(attackV){
+            attack = 0;
+            spawnBullet();
+        }
+            
+
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
     //Breaking
@@ -107,6 +117,8 @@ void starship::windowValues(int width, int height)
 {
     starship::videoMode.width = width;
     starship::videoMode.height = height;
+
+    initShip();
 }
 
 void starship::spawnBullet() 
@@ -124,12 +136,26 @@ void starship::updateShip()
 {
     controlShip();
     updateBullet();
+
+    if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
+        ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
+    }
 }
 
 void starship::updateBullet() 
 {
     for(int i = 0; i < bullets.size(); i++)
+    {
+        //Move Bullets
         bullets[i].move(sin((bullets[i].getRotation() / 180) * 3.14) / 5, -1 * cos((bullets[i].getRotation() / 180) * 3.14) / 5);
+
+        //Destroy Bullets outside of screen
+        if(bullets[i].getPosition().x > videoMode.width + 30 || bullets[i].getPosition().y > videoMode.height + 30 || bullets[i].getPosition().x <= -30 || bullets[i].getPosition().y <= -30){
+            bullets.erase(bullets.begin() + i);
+        }
+    }
+        
+
 }
 
 

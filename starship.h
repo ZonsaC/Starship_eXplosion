@@ -44,8 +44,9 @@ private:
     sf::Time time;
 
     //Variables
-    int prevTimeBullet;
-    int attackSpeed;
+    bool attackV;
+    float attack;
+    float attackSpeed;
     bool spawnBulletBool;
     float speedMax;
     float acceleration;
