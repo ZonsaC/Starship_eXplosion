@@ -133,7 +133,17 @@ void starship::updateShip()
 void starship::updateBullet() 
 {
     for(int i = 0; i < bullets.size(); i++)
+    {
+        //Move Bullets
         bullets[i].move(sin((bullets[i].getRotation() / 180) * 3.14) / 5, -1 * cos((bullets[i].getRotation() / 180) * 3.14) / 5);
+
+        //Destroy Bullets outside of screen
+        if(bullets[i].getPosition().x > videoMode.width + 30 || bullets[i].getPosition().y > videoMode.height + 30 || bullets[i].getPosition().x <= -30 || bullets[i].getPosition().y <= -30){
+            bullets.erase(bullets.begin() + i);
+        }
+    }
+        
+
 }
 
 
