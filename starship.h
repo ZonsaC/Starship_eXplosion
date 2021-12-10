@@ -15,6 +15,9 @@ class starship
 public:
     sf::VideoMode videoMode;
 
+    int xMovement;
+    int yMovement;
+
     void windowValues(int, int);
     void spawnBullet();
 
@@ -36,8 +39,7 @@ private:
     std::vector<sf::Sprite> bullets;
 
     bool spawnBulletBool = false;
-    int xMovement;
-    int yMovement;
+
 
 
     void initShip();
