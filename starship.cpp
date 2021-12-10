@@ -20,13 +20,15 @@ void starship::initVariables()
 {
     // Dont change
     spawnBulletBool = false;
+    attackV = false;
     speedCur = 0.f;
     tempRotation = 0.f;
+    attack = 0.f;
 
     //Parameters
     acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
     speedMax = 0.1f; //Max Speed the Ship travels -- Normal 0.1f
-
+    attackSpeed = 2000.f; //Max Attackspeed - HigherNumber = LongerWaittime 
     
 }
 
@@ -76,14 +78,24 @@ void starship::controlShip()
         ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
     }    
 
+    if(attack >= attackSpeed)
+        {
+            attackV = true;
+        } else 
+        {
+            attack += 1;
+            attackV = false;
+        }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false)
     {
-        
-        prevTimeBullet = time.asSeconds();
-
         spawnBulletBool = true;
 
-        spawnBullet(); 
+        if(attackV){
+            attack = 0;
+            spawnBullet();
+        }
+            
+
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
     //Breaking
