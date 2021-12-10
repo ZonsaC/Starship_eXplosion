@@ -15,27 +15,35 @@ class starship
 public:
     sf::VideoMode videoMode;
 
+    //Functions
     void windowValues(int, int);
     void spawnBullet();
 
+    //Render
     void renderShip(sf::RenderTarget& target);
     void renderBullet(sf::RenderTarget& target);
+
+    //Update
     void updateShip();
     void updateBullet();
+    void controlShip();
 
-
+    //Constructor/Destructor
     starship();
     ~starship();
 
 private:
+    //Ship
     sf::Sprite ship;
     sf::Texture texture;
 
+    //Bullets
     sf::Sprite bullet;
     sf::Texture bulletTexture;
     std::vector<sf::Sprite> bullets;
     sf::Time time;
 
+    //Variables
     int prevTimeBullet;
     int attackSpeed;
     bool spawnBulletBool;
@@ -43,19 +51,9 @@ private:
     float acceleration;
     float speedCur;
 
-
+    //Init
     void initVariables();
     void initShip();
     void initBullet();
-
-    void controlShip();
-
-
 };
-
-
-
-
-
-
 #endif

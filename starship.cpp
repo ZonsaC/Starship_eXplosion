@@ -6,6 +6,7 @@
 
 starship::starship() 
 {
+    //Init
     initVariables();
     initShip();
     initBullet();
@@ -18,33 +19,38 @@ starship::~starship()
 
 void starship::initVariables() 
 {
-    prevTimeBullet = 0;
-    attackSpeed = 1;
+    // Dont change
     spawnBulletBool = false;
-    acceleration = 0.000025f;
-    speedMax = 0.1f;
     speedCur = 0.f;
+
+    //Parameters
+    acceleration = 0.00001f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
+    speedMax = 0.1f; //Max Speed the Ship travels -- Normal 0.1f
+
+    
 }
+
 
 //Init Stuff
 
 void starship::initShip()
 {
+    //Load Texture
     texture.loadFromFile("assets/graphics/starship.png");
     ship.setTexture(texture);
 
+    //Change Origin
     ship.setOrigin(ship.getGlobalBounds().width / 2, ship.getGlobalBounds().height / 2);
     ship.setPosition(500 , 500);
-
-    std::cout << videoMode.width << "\n";
-    std::cout << videoMode.height << "\n";
 }
 
 void starship::initBullet() 
 {
+    //Load Texture
     bulletTexture.loadFromFile("assets/graphics/bullet.png");
     bullet.setTexture(bulletTexture);
 
+    //Change Origin
     bullet.setOrigin(bullet.getGlobalBounds().width / 2, bullet.getGlobalBounds().height / 2);
 }
 
@@ -85,10 +91,10 @@ void starship::controlShip()
 
         spawnBulletBool = true;
 
-        spawnBullet();
+        spawnBullet(); 
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
-    //Break
+    //Breaking
     if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         if(speedCur > 0)
