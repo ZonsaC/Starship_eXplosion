@@ -37,7 +37,6 @@ private:
 
     bool spawnBulletBool;
     float speedMax;
-    float speedMaxBack;
     float acceleration;
     float speedCur;
 
