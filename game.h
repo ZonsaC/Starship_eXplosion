@@ -11,16 +11,19 @@
 #include <ctime>
 #include "starship.h"
 #include "enemy.h"
+#include "screens.h"
 
 /*
     Class that acts as the game engine.
     Wrapper class.
 */
 
-class Game : public Enemy
+class Game
 {
 private:
     Starship* starship;
+    Enemy* enemy;
+    Screens* screens;
 
     //Private function
     void initVariables();

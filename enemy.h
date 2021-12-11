@@ -29,6 +29,7 @@ class Enemy
     public:
         void windowValues(int, int);
         Enemy();
+        Enemy(int, int);
         ~Enemy();
         
         void spawnAsteroid();
