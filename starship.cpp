@@ -1,22 +1,27 @@
 #include "game.h"
-#include "starship.h"
+#include "Starship.h"
 #include <math.h>
 
 //Constructor/Destructor
-
-starship::starship() 
+Starship::Starship()
 {
-    //Init
-    initVariables();
-    initBullet();
 }
 
-starship::~starship() 
+Starship::Starship(int width, int height) 
+{
+    windowValues(width, height);
+    //Init
+    initVariables();
+    initBullet(); 
+    initShip();
+}
+
+Starship::~Starship() 
 {
     
 }
 
-void starship::initVariables() 
+void Starship::initVariables() 
 {
     // Dont change
     spawnBulletBool = false;
@@ -35,18 +40,18 @@ void starship::initVariables()
 
 //Init Stuff
 
-void starship::initShip()
+void Starship::initShip()
 {
     //Load Texture
-    texture.loadFromFile("assets/graphics/starship.png");
-    ship.setTexture(texture);
+    this->texture.loadFromFile("assets/graphics/starship.png");
+    ship.setTexture(this->texture);
 
     //Change Origin
     ship.setOrigin(ship.getGlobalBounds().width / 2, ship.getGlobalBounds().height / 2);
     ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
 }
 
-void starship::initBullet() 
+void Starship::initBullet() 
 {
     //Load Texture
     bulletTexture.loadFromFile("assets/graphics/bullet.png");
@@ -58,7 +63,7 @@ void starship::initBullet()
 
 //Functions
 
-void starship::controlShip() 
+void Starship::controlShip() 
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
@@ -113,15 +118,13 @@ void starship::controlShip()
     }
 }
 
-void starship::windowValues(int width, int height) 
+void Starship::windowValues(int width, int height) 
 {
-    starship::videoMode.width = width;
-    starship::videoMode.height = height;
-
-    initShip();
+    Starship::videoMode.width = width;
+    Starship::videoMode.height = height;
 }
 
-void starship::spawnBullet() 
+void Starship::spawnBullet() 
 {
     bullet.setRotation(ship.getRotation());
     bullet.setPosition(ship.getPosition().x, ship.getPosition().y);
@@ -132,7 +135,7 @@ void starship::spawnBullet()
 
 //Update Stuff
 
-void starship::updateShip()
+void Starship::updateShip()
 {
     controlShip();
     updateBullet();
@@ -142,7 +145,7 @@ void starship::updateShip()
     }
 }
 
-void starship::updateBullet() 
+void Starship::updateBullet() 
 {
     for(int i = 0; i < bullets.size(); i++)
     {
@@ -161,7 +164,7 @@ void starship::updateBullet()
 
 // Render Stuff
 
-void starship::renderShip(sf::RenderTarget& target) 
+void Starship::renderShip(sf::RenderTarget& target) 
 {
     //Render Bullets
     for(auto &e : this->bullets)

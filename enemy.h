@@ -9,7 +9,7 @@
 #include <SFML/Audio.hpp>
 
 #include <iostream>
-class enemy
+class Enemy
 {
     private:
     
@@ -28,8 +28,8 @@ class enemy
     
     public:
         void windowValues(int, int);
-        enemy();
-        ~enemy();
+        Enemy();
+        ~Enemy();
         
         void spawnAsteroid();
         void updateAsteroids();

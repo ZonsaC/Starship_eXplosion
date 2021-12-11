@@ -1,31 +1,31 @@
 #include "game.h"
 #include "enemy.h"
 
-enemy::enemy() 
+Enemy::Enemy() 
 {
     
 }
 
-enemy::~enemy()
+Enemy::~Enemy()
 {
 
 }
 
-void enemy::initAsteroid(){
+void Enemy::initAsteroid(){
     texture.loadFromFile("assets/graphics/enemy.png");
     asteroid.setTexture(texture);
     asteroid.setOrigin(asteroid.getGlobalBounds().width/2, asteroid.getGlobalBounds().height/2);
     asteroid.setPosition(0, -1*asteroid.getGlobalBounds().height);
 }
 
-void enemy::windowValues(int width, int height) 
+void Enemy::windowValues(int width, int height) 
 {
-    enemy::videoMode.width = width;
-    enemy::videoMode.height = height;
+    videoMode.width = width;
+    videoMode.height = height;
     initAsteroid();
 }
 
-void enemy::spawnAsteroid() 
+void Enemy::spawnAsteroid() 
 {
     
     int pos = rand() % 4;
@@ -59,7 +59,7 @@ void enemy::spawnAsteroid()
     asteroids.push_back(asteroid);
 }
 
-void enemy::updateAsteroids() 
+void Enemy::updateAsteroids() 
 {
     if (asteroids.size() < maxAsteroid)
     {
@@ -74,7 +74,7 @@ void enemy::updateAsteroids()
     
 }
 
-void enemy::renderAsteroids(sf::RenderTarget& target) 
+void Enemy::renderAsteroids(sf::RenderTarget& target) 
 {
     
     for (auto &i : asteroids)

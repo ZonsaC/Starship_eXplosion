@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-class starship
+class Starship
 {
 public:
     sf::VideoMode videoMode;
@@ -29,8 +29,9 @@ public:
     void controlShip();
 
     //Constructor/Destructor
-    starship();
-    ~starship();
+    Starship();
+    Starship(int, int);
+    ~Starship();
 
 private:
     //Ship

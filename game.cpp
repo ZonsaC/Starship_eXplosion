@@ -13,9 +13,7 @@ void Game::initWindow()
     this->videoMode.width = 1280;
     this->videoMode.height = 720;
     
-
-    starship::windowValues(videoMode.width, videoMode.height);
-    enemy::windowValues(videoMode.width, videoMode.height);
+    Enemy::windowValues(videoMode.width, videoMode.height);
     this->window = new sf::RenderWindow(this->videoMode, "Window", sf::Style::Titlebar | sf::Style::Close);
 
     this->texture.loadFromFile("assets/graphics/background.png");
@@ -29,12 +27,13 @@ Game::Game()
 {
     this->initVariables();
     this->initWindow();
-    
+    Starship s(videoMode.width, videoMode.height);
+    starship = s;
 }
 
 Game::~Game()
 {
-delete this->window;
+    delete this->window;
 
 }
 
@@ -67,8 +66,8 @@ void Game::update()
 {
     //Event polling
     this->pollEvent();
-    starship::updateShip();
-    enemy::updateAsteroids();
+    starship.updateShip();
+    Enemy::updateAsteroids();
 
 }
 
@@ -88,8 +87,8 @@ void Game::render()
 
     //Draw game objects
     this->window->draw(background);
-    starship::renderShip(*window);
-    enemy::renderAsteroids(*window);
+    starship.renderShip(*window);
+    Enemy::renderAsteroids(*window);
     this->window->display();
     
 }

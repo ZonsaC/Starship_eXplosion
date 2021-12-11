@@ -17,10 +17,10 @@
     Wrapper class.
 */
 
-class Game : public starship, public enemy
+class Game : public Enemy
 {
 private:
-
+    Starship starship;
 
     //Private function
     void initVariables();
