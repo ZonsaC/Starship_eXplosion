@@ -20,7 +20,7 @@
 class Game : public Enemy
 {
 private:
-    Starship starship;
+    Starship* starship;
 
     //Private function
     void initVariables();

@@ -27,8 +27,7 @@ Game::Game()
 {
     this->initVariables();
     this->initWindow();
-    Starship s(videoMode.width, videoMode.height);
-    starship = s;
+    starship = new Starship(videoMode.width, videoMode.height);
 }
 
 Game::~Game()
@@ -66,7 +65,7 @@ void Game::update()
 {
     //Event polling
     this->pollEvent();
-    starship.updateShip();
+    starship->updateShip();
     Enemy::updateAsteroids();
 
 }
@@ -87,7 +86,7 @@ void Game::render()
 
     //Draw game objects
     this->window->draw(background);
-    starship.renderShip(*window);
+    starship->renderShip(*window);
     Enemy::renderAsteroids(*window);
     this->window->display();
     
