@@ -30,12 +30,15 @@ void Starship::initVariables()
     speedCur = 0.f;
     tempRotation = 0.f;
     attack = 0.f;
+    curDestroyTexture = 0.f;
+
+    
 
     //Parameters
     acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
     speedMax = 0.1f; //Max Speed the Ship travels -- Normal 0.1f
     attackSpeed = 2000.f; //Max Attackspeed - HigherNumber = LongerWaittime 
-    
+    destroyTextureSpeed = 0.5f; //Texture changespeed when destroyed
 }
 
 
@@ -44,7 +47,7 @@ void Starship::initVariables()
 void Starship::initShip()
 {
     //Load Texture
-    this->texture.loadFromFile("assets/graphics/starship.png");
+    this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(0 ,0 , 65, 75));
     ship.setTexture(this->texture);
 
     //Change Origin
@@ -137,6 +140,16 @@ void Starship::spawnBullet()
 void Starship::destroyShip()
 {
     if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
+
+        if(curDestroyTexture < texture.getSize().x * 4)
+        {
+            curDestroyTexture += destroyTextureSpeed;
+            if(static_cast<int>(curDestroyTexture) % 65 == 0)
+            {
+                this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(curDestroyTexture ,0 , 65, 75));
+                ship.setTexture(this->texture);
+            }
+        }
         destroyShipBool = true;
     }
 }

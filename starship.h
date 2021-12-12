@@ -47,6 +47,8 @@ private:
     sf::Time time;
 
     //Variables
+    float destroyTextureSpeed;
+    float curDestroyTexture;
     bool attackV;
     float attack;
     float attackSpeed;
