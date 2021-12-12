@@ -7,22 +7,53 @@
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 
+
 #include <iostream>
 
 class Screens
 {
 public:
-Screens();
-Screens(int, int);
-~Screens();
+    bool startBool;
 
-void updateScreens();
+    // Constructor / Destructor
+    Screens();
+    Screens(sf::RenderWindow*);
+    ~Screens();
 
-void renderScreens(sf::RenderTarget& target);
+    //Functions
+    void windowValues(sf::RenderWindow*);
 
+    //Update
+    void updateScreens();
+
+    void updateMousepos();
+
+    //Render
+    void renderScreens(sf::RenderTarget& target);
+
+    
 
 private:
+    sf::Vector2i mousePos;
 
+    sf::VideoMode videoMode;
+    sf::RenderWindow* window;
+
+    sf::Text startText;
+
+    sf::Font f_startText;
+
+    sf::Sprite startScreen;
+    sf::Sprite startButton;
+    bool isHeld;
+
+    sf::Texture t_startScreen;
+    sf::Texture t_startButton;
+
+    void initVariables();
+    void initStartscreen();
+    void initStartbutton();
+    void initStarttext();
 
 
 };

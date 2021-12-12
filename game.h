@@ -32,11 +32,11 @@ private:
 public:
     //Window
     sf::RenderWindow* window;
+    sf::Vector2i mousePos;
     sf::VideoMode videoMode;
     sf::Event ev;
     sf::Texture texture;
     sf::Sprite background;
-
 
     //Constructors / Destructors
     Game();

@@ -6,6 +6,12 @@ Enemy::Enemy()
     
 }
 
+Enemy::Enemy(int width, int height) 
+{
+    windowValues(width, height);
+    initAsteroid();
+}
+
 Enemy::~Enemy()
 {
 
@@ -22,7 +28,6 @@ void Enemy::windowValues(int width, int height)
 {
     videoMode.width = width;
     videoMode.height = height;
-    initAsteroid();
 }
 
 void Enemy::spawnAsteroid() 
