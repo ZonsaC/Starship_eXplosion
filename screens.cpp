@@ -82,6 +82,7 @@ void Screens::initStarttext()
 
 void Screens::initEndscreen()
 {
+    //Init Endtext
     endText.setFont(f_startText);
     endText.setCharacterSize(200);
     endText.setString("Game Over");
@@ -93,16 +94,18 @@ void Screens::initEndscreen()
 
 void Screens::initRetrybutton()
 {
+    //Inits Button
     retryButton.setTexture(t_startButton);
     retryButton.setOrigin(retryButton.getGlobalBounds().width / 2, retryButton.getGlobalBounds().height / 2);
     retryButton.setPosition(endText.getPosition().x, endText.getPosition().y + 200);
 
+    //Inits Text
     retryText.setFont(f_startText);
     retryText.setString("Retry");
     retryText.setCharacterSize(80);
     retryText.setFillColor(sf::Color::White);
     retryText.setOrigin(retryText.getLocalBounds().left + retryText.getLocalBounds().width / 2, 
-                      retryText.getLocalBounds().top + retryText.getLocalBounds().height / 2);
+                        retryText.getLocalBounds().top + retryText.getLocalBounds().height / 2);
     retryText.setPosition(retryButton.getPosition());
 
 }

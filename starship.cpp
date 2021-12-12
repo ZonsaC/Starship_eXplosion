@@ -3,6 +3,7 @@
 #include <math.h>
 
 //Constructor/Destructor
+
 Starship::Starship()
 {
 }
@@ -66,6 +67,7 @@ void Starship::initBullet()
     bullet.setOrigin(bullet.getGlobalBounds().width / 2, bullet.getGlobalBounds().height / 2);
 }
 
+
 //Functions
 
 void Starship::controlShip() 
@@ -89,13 +91,14 @@ void Starship::controlShip()
     }    
 
     if(attack >= attackSpeed)
-        {
-            attackV = true;
-        } else 
-        {
-            attack += 1;
-            attackV = false;
-        }
+    {
+        attackV = true;
+    } else 
+    {
+        attack += 1;
+        attackV = false;
+    }
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false)
     {
         spawnBulletBool = true;
@@ -104,8 +107,6 @@ void Starship::controlShip()
             attack = 0;
             spawnBullet();
         }
-            
-
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
     //Breaking
@@ -153,6 +154,7 @@ void Starship::destroyShip()
         destroyShipBool = true;
     }
 }
+
 
 //Update Stuff
 

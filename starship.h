@@ -23,7 +23,6 @@ public:
 
     //Render
     void renderShip(sf::RenderTarget& target);
-    void renderBullet(sf::RenderTarget& target);
 
     //Update
     void updateShip(bool);
