@@ -88,14 +88,14 @@ void Screens::initEndscreen()
 
     endText.setOrigin(endText.getLocalBounds().left + endText.getLocalBounds().width / 2, 
                       endText.getLocalBounds().top + endText.getLocalBounds().height / 2);
-    endText.setPosition(videoMode.width / 2, videoMode.height / 2);
+    endText.setPosition(videoMode.width / 2, videoMode.height / 2 - 100);
 }
 
 void Screens::initRetrybutton()
 {
     retryButton.setTexture(t_startButton);
     retryButton.setOrigin(retryButton.getGlobalBounds().width / 2, retryButton.getGlobalBounds().height / 2);
-    retryButton.setPosition(videoMode.width / 2, videoMode.height / 2 + 200);
+    retryButton.setPosition(endText.getPosition().x, endText.getPosition().y + 200);
 
     retryText.setFont(f_startText);
     retryText.setString("Retry");
