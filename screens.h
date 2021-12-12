@@ -15,6 +15,7 @@ class Screens
 public:
     bool startBool;
     bool endBool;
+    bool retryBool;
 
     // Constructor / Destructor
     Screens();
@@ -61,12 +62,17 @@ private:
 
     sf::Text endText;
 
+    //Retry Button
+    sf::Text retryText;
+    sf::Sprite retryButton;
+
     //Inits
     void initVariables();
     void initStartscreen();
     void initStartbutton();
     void initStarttext();
     void initEndscreen();
+    void initRetrybutton();
 
 };
 

@@ -48,8 +48,9 @@ void Starship::initShip()
     ship.setTexture(this->texture);
 
     //Change Origin
-    ship.setOrigin(ship.getGlobalBounds().width / 2, ship.getGlobalBounds().height / 2);
+    ship.setOrigin(ship.getLocalBounds().width / 2, ship.getLocalBounds().height / 2);
     ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
+    ship.setRotation(0.f);
 }
 
 void Starship::initBullet() 
@@ -142,8 +143,16 @@ void Starship::destroyShip()
 
 //Update Stuff
 
-void Starship::updateShip()
+void Starship::updateShip(bool retry)
 {
+    if(retry)
+    {
+        initVariables();
+        initBullet(); 
+        initShip();
+        destroyShipBool = false;
+    }
+
     if(!destroyShipBool)
     {
         controlShip();

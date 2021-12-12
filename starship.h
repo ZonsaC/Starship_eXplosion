@@ -26,7 +26,7 @@ public:
     void renderBullet(sf::RenderTarget& target);
 
     //Update
-    void updateShip();
+    void updateShip(bool);
     void updateBullet();
     void controlShip();
 

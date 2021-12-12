@@ -17,6 +17,7 @@ Screens::Screens(sf::RenderWindow* pointerWindow)
     initStartbutton();
     initStarttext();
     initEndscreen();
+    initRetrybutton();
 }
 
 Screens::~Screens() 
@@ -29,6 +30,7 @@ void Screens::initVariables()
 {
     isHeld = false;
     startBool = false;
+    retryBool = false;
 
     Hue = 0;
     increaseSpeed = 0.025f;
@@ -89,11 +91,31 @@ void Screens::initEndscreen()
     endText.setPosition(videoMode.width / 2, videoMode.height / 2);
 }
 
+void Screens::initRetrybutton()
+{
+    retryButton.setTexture(t_startButton);
+    retryButton.setOrigin(retryButton.getGlobalBounds().width / 2, retryButton.getGlobalBounds().height / 2);
+    retryButton.setPosition(videoMode.width / 2, videoMode.height / 2 + 200);
+
+    retryText.setFont(f_startText);
+    retryText.setString("Retry");
+    retryText.setCharacterSize(80);
+    retryText.setFillColor(sf::Color::White);
+    retryText.setOrigin(retryText.getLocalBounds().left + retryText.getLocalBounds().width / 2, 
+                      retryText.getLocalBounds().top + retryText.getLocalBounds().height / 2);
+    retryText.setPosition(retryButton.getPosition());
+
+}
+
 //Update
 void Screens::updateScreens(bool end) 
 {
     //Init when ship is dead
     endBool = end;
+    if(!endBool)
+    {
+        retryBool = false;
+    }
 
     updateEndtext();
     
@@ -110,6 +132,12 @@ void Screens::updateScreens(bool end)
             {
                 startBool = true;
             }
+
+            //When mouse is on retryButton
+            if(retryButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
+            {
+                retryBool = true;
+            }
         }
 
     } else isHeld = false;
@@ -124,6 +152,8 @@ void Screens::updateEndtext()
             curIncSpeed += increaseSpeed;
             Hue = round(curIncSpeed);
             endText.setFillColor(sf::Color(255, 255, 255, Hue));
+            retryButton.setColor(sf::Color(255, 255, 255, Hue));
+            retryText.setFillColor(sf::Color(255, 255, 255, Hue));
         }
 }
 
@@ -143,5 +173,10 @@ void Screens::renderScreens(sf::RenderTarget& target)
     }
 
     if(endBool)
+    {
         target.draw(endText);
+        target.draw(retryButton);
+        target.draw(retryText);
+    }
+        
 }
