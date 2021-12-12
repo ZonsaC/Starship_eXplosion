@@ -14,6 +14,7 @@ class Screens
 {
 public:
     bool startBool;
+    bool endBool;
 
     // Constructor / Destructor
     Screens();
@@ -24,7 +25,8 @@ public:
     void windowValues(sf::RenderWindow*);
 
     //Update
-    void updateScreens();
+    void updateScreens(bool);
+    void updateEndtext();
 
     void updateMousepos();
 
@@ -39,6 +41,8 @@ private:
     sf::VideoMode videoMode;
     sf::RenderWindow* window;
 
+
+    //Startscreen
     sf::Text startText;
 
     sf::Font f_startText;
@@ -50,11 +54,19 @@ private:
     sf::Texture t_startScreen;
     sf::Texture t_startButton;
 
+    //Endscreen
+    int Hue;
+    float curIncSpeed;
+    float increaseSpeed;
+
+    sf::Text endText;
+
+    //Inits
     void initVariables();
     void initStartscreen();
     void initStartbutton();
     void initStarttext();
-
+    void initEndscreen();
 
 };
 

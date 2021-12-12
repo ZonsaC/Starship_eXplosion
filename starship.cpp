@@ -25,6 +25,7 @@ void Starship::initVariables()
 {
     // Dont change
     spawnBulletBool = false;
+    destroyShipBool = false;
     attackV = false;
     speedCur = 0.f;
     tempRotation = 0.f;
@@ -132,17 +133,23 @@ void Starship::spawnBullet()
     bullets.push_back(bullet);
 }
 
+void Starship::destroyShip()
+{
+    if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
+        destroyShipBool = true;
+    }
+}
 
 //Update Stuff
 
 void Starship::updateShip()
 {
-    controlShip();
-    updateBullet();
-
-    if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
-        ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
-    }
+    if(!destroyShipBool)
+    {
+        controlShip();
+        updateBullet();
+    } 
+    destroyShip();
 }
 
 void Starship::updateBullet() 

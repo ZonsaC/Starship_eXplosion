@@ -13,11 +13,13 @@
 class Starship
 {
 public:
+    bool destroyShipBool;
     sf::VideoMode videoMode;
 
     //Functions
     void windowValues(int, int);
     void spawnBullet();
+    void destroyShip();
 
     //Render
     void renderShip(sf::RenderTarget& target);

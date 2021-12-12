@@ -1,6 +1,8 @@
 #include "game.h"
 #include "screens.h"
 
+#include <math.h>
+
 
 // Constructor / Destructor
 Screens::Screens() 
@@ -14,18 +16,11 @@ Screens::Screens(sf::RenderWindow* pointerWindow)
     initStartscreen();
     initStartbutton();
     initStarttext();
+    initEndscreen();
 }
 
 Screens::~Screens() 
 {
-    
-}
-
-void Screens::windowValues(sf::RenderWindow* pointerWindow) 
-{
-    window = pointerWindow;
-    videoMode.width = window->getSize().x;
-    videoMode.height = window->getSize().y;
 }
 
 
@@ -34,7 +29,20 @@ void Screens::initVariables()
 {
     isHeld = false;
     startBool = false;
+
+    Hue = 0;
+    increaseSpeed = 0.025f;
+    curIncSpeed = 0.f;
 }
+
+
+void Screens::windowValues(sf::RenderWindow* pointerWindow) 
+{
+    window = pointerWindow;
+    videoMode.width = window->getSize().x;
+    videoMode.height = window->getSize().y;
+}
+
 void Screens::initStartscreen()
 {
     //load image
@@ -54,7 +62,7 @@ void Screens::initStartbutton()
 
     //set origin + pos
     startButton.setOrigin(startButton.getGlobalBounds().width / 2, startButton.getGlobalBounds().height / 2);
-    startButton.setPosition(startScreen.getPosition().x - 300, startScreen.getPosition().y + 200);
+    startButton.setPosition(startScreen.getPosition().x - 305, startScreen.getPosition().y + 200);
 }
 
 void Screens::initStarttext()
@@ -65,22 +73,39 @@ void Screens::initStarttext()
     startText.setCharacterSize(80);
     startText.setFillColor(sf::Color::White);
 
-    startText.setOrigin(startText.getGlobalBounds().width / 2, startText.getGlobalBounds().height / 2);
-    startText.setPosition(startButton.getPosition().x - 10, startButton.getPosition().y - 20);
+    startText.setOrigin(startText.getLocalBounds().left + startText.getLocalBounds().width / 2, 
+                        startText.getLocalBounds().top + startText.getLocalBounds().height / 2);
+    startText.setPosition(startButton.getPosition().x, startButton.getPosition().y);
+}
+
+void Screens::initEndscreen()
+{
+    endText.setFont(f_startText);
+    endText.setCharacterSize(200);
+    endText.setString("Game Over");
+
+    endText.setOrigin(endText.getLocalBounds().left + endText.getLocalBounds().width / 2, 
+                      endText.getLocalBounds().top + endText.getLocalBounds().height / 2);
+    endText.setPosition(videoMode.width / 2, videoMode.height / 2);
 }
 
 //Update
-void Screens::updateScreens() 
+void Screens::updateScreens(bool end) 
 {
+    //Init when ship is dead
+    endBool = end;
+
+    updateEndtext();
     
-    
+    //Leftclick Event
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
         if(!isHeld)
         {
             isHeld = true;
-
             updateMousepos();
+
+            //When mouse is on startButton
             if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
                 startBool = true;
@@ -88,6 +113,18 @@ void Screens::updateScreens()
         }
 
     } else isHeld = false;
+}
+
+void Screens::updateEndtext()
+{
+    //Fade in endText
+    if(Hue < 255 && endBool)
+        if(curIncSpeed < 255)
+        {
+            curIncSpeed += increaseSpeed;
+            Hue = round(curIncSpeed);
+            endText.setFillColor(sf::Color(255, 255, 255, Hue));
+        }
 }
 
 void Screens::updateMousepos()
@@ -99,7 +136,12 @@ void Screens::updateMousepos()
 //Render
 void Screens::renderScreens(sf::RenderTarget& target) 
 {
-    target.draw(startScreen);
-    target.draw(startButton);
-    target.draw(startText);
+    if(!startBool){
+        target.draw(startScreen);
+        target.draw(startButton);
+        target.draw(startText);
+    }
+
+    if(endBool)
+        target.draw(endText);
 }

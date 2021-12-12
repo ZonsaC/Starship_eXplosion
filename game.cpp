@@ -67,7 +67,7 @@ void Game::update()
 {
     //Event polling
     this->pollEvent();
-    screens->updateScreens();
+    screens->updateScreens(starship->destroyShipBool);
     starship->updateShip();
     enemy->updateAsteroids();
 }
@@ -93,9 +93,9 @@ void Game::render()
     {
     starship->renderShip(*window);
     enemy->renderAsteroids(*window);
-    } else {
-        screens->renderScreens(*window);
-    }
+    } 
+
+    screens->renderScreens(*window);
 
 
     this->window->display();
