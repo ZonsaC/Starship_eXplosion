@@ -67,8 +67,8 @@ void Game::update()
 {
     //Event polling
     this->pollEvent();
-    screens->updateScreens(starship->destroyShipBool);
-    starship->updateShip(screens->retryBool);
+    screens->updateScreens(starship->destroyShipBool, starship->points);
+    starship->updateShip(screens->retryBool, screens->startBool);
     enemy->updateAsteroids();
 }
 

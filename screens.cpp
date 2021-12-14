@@ -2,6 +2,7 @@
 #include "screens.h"
 
 #include <math.h>
+#include <sstream>
 
 
 // Constructor / Destructor
@@ -11,7 +12,8 @@ Screens::Screens()
 
 Screens::Screens(sf::RenderWindow* pointerWindow) 
 {
-    windowValues(pointerWindow);
+    initValues(pointerWindow);
+    initPointstext();
     initVariables();
     initStartscreen();
     initStartbutton();
@@ -38,7 +40,7 @@ void Screens::initVariables()
 }
 
 
-void Screens::windowValues(sf::RenderWindow* pointerWindow) 
+void Screens::initValues(sf::RenderWindow* pointerWindow) 
 {
     window = pointerWindow;
     videoMode.width = window->getSize().x;
@@ -110,8 +112,15 @@ void Screens::initRetrybutton()
 
 }
 
+void Screens::initPointstext()
+{
+    pointsText.setFont(f_startText);
+    pointsText.setCharacterSize(40);
+    pointsText.setPosition(10, 0);
+}
+
 //Update
-void Screens::updateScreens(bool end) 
+void Screens::updateScreens(bool end, int p) 
 {
     //Init when ship is dead
     endBool = end;
@@ -144,6 +153,12 @@ void Screens::updateScreens(bool end)
         }
 
     } else isHeld = false;
+
+    
+    std::stringstream ss;
+    ss << "Points: " << p;
+    pointsText.setString(ss.str());
+
 }
 
 void Screens::updateEndtext()
@@ -170,13 +185,20 @@ void Screens::updateMousepos()
 void Screens::renderScreens(sf::RenderTarget& target) 
 {
     if(!startBool){
+        //Start Screen
         target.draw(startScreen);
         target.draw(startButton);
         target.draw(startText);
+        
+    } else {
+        if(!endBool && startBool)
+        // While Game
+        target.draw(pointsText);
     }
 
     if(endBool)
     {
+        //End Screen
         target.draw(endText);
         target.draw(retryButton);
         target.draw(retryText);

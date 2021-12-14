@@ -27,7 +27,9 @@ void Starship::initVariables()
     // Dont change
     spawnBulletBool = false;
     destroyShipBool = false;
+    isHold = false;
     attackV = false;
+    points = 0;
     speedCur = 0.f;
     tempRotation = 0.f;
     attack = 0.f;
@@ -155,16 +157,28 @@ void Starship::destroyShip()
     }
 }
 
+void Starship::getPoints() 
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::P) && !isHold)
+    {
+        isHold = true;
+        points += 1;
+        std::cout << points << "\n";
+
+    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) isHold = false;
+}
+
 
 //Update Stuff
 
-void Starship::updateShip(bool retry)
+void Starship::updateShip(bool retry, bool startBool)
 {
     if(retry)
     {
         initVariables();
         initBullet(); 
         initShip();
+
         destroyShipBool = false;
     }
 
@@ -172,7 +186,11 @@ void Starship::updateShip(bool retry)
     {
         controlShip();
         updateBullet();
+
+        if(startBool)
+            getPoints();
     } 
+    
     destroyShip();
 }
 

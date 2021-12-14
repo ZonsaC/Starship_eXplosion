@@ -7,8 +7,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 
-
 #include <iostream>
+
 
 class Screens
 {
@@ -23,10 +23,10 @@ public:
     ~Screens();
 
     //Functions
-    void windowValues(sf::RenderWindow*);
+    void initValues(sf::RenderWindow*);
 
     //Update
-    void updateScreens(bool);
+    void updateScreens(bool, int);
     void updateEndtext();
 
     void updateMousepos();
@@ -66,6 +66,11 @@ private:
     sf::Text retryText;
     sf::Sprite retryButton;
 
+    //Points
+    sf::Text pointsText;
+    int points;
+
+
     //Inits
     void initVariables();
     void initStartscreen();
@@ -73,6 +78,7 @@ private:
     void initStarttext();
     void initEndscreen();
     void initRetrybutton();
+    void initPointstext();
 
 };
 

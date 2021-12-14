@@ -14,18 +14,20 @@ class Starship
 {
 public:
     bool destroyShipBool;
+    unsigned points;
     sf::VideoMode videoMode;
 
     //Functions
     void windowValues(int, int);
     void spawnBullet();
     void destroyShip();
+    void getPoints();
 
     //Render
     void renderShip(sf::RenderTarget& target);
 
     //Update
-    void updateShip(bool);
+    void updateShip(bool, bool);
     void updateBullet();
     void controlShip();
 
@@ -46,6 +48,7 @@ private:
     sf::Time time;
 
     //Variables
+    bool isHold;
     float destroyTextureSpeed;
     float curDestroyTexture;
     bool attackV;
