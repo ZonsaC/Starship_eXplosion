@@ -1,5 +1,5 @@
 #include "game.h"
-#include "Starship.h"
+#include "starship.h"
 #include <math.h>
 
 //Constructor/Destructor
@@ -25,23 +25,27 @@ Starship::~Starship()
 void Starship::initVariables() 
 {
     // Dont change
+    upgradeAutofire = false;
+    isUpgradeSet = false;
     spawnBulletBool = false;
     destroyShipBool = false;
     isHold = false;
     attackV = false;
+    upgradeChoice = 0;
     points = 0;
     speedCur = 0.f;
     tempRotation = 0.f;
     attack = 0.f;
     curDestroyTexture = 0.f;
+    upgradeAttackspeed = 1.f;
 
     
 
     //Parameters
     acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
     speedMax = 0.1f; //Max Speed the Ship travels -- Normal 0.1f
-    attackSpeed = 2000.f; //Max Attackspeed - HigherNumber = LongerWaittime 
-    destroyTextureSpeed = 0.5f; //Texture changespeed when destroyed
+    attackSpeed = 5000.f; //Max Attackspeed - HigherNumber = LongerWaittime 
+    destroyTextureSpeed = 1.f; //Texture changespeed when destroyed
 }
 
 
@@ -92,7 +96,7 @@ void Starship::controlShip()
         ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
     }    
 
-    if(attack >= attackSpeed)
+    if(attack >= attackSpeed / upgradeAttackspeed)
     {
         attackV = true;
     } else 
@@ -101,7 +105,7 @@ void Starship::controlShip()
         attackV = false;
     }
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false)
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false || upgradeAutofire)
     {
         spawnBulletBool = true;
 
@@ -187,10 +191,13 @@ void Starship::updateShip(bool retry, bool startBool)
         controlShip();
         updateBullet();
 
-        if(startBool)
+        if(startBool){
             getPoints();
+            updateUpgrades();
+        }
+
     } 
-    
+
     destroyShip();
 }
 
@@ -210,6 +217,59 @@ void Starship::updateBullet()
 
 }
 
+void Starship::updateUpgrades() 
+{
+
+    //Chose Upgrade
+    if(points % 10 != 0)
+    {
+        isUpgradeSet = true;
+    }
+    if(points % 10 == 0 && points != 0 && isUpgradeSet)
+    {
+        isUpgradeSet = false;
+
+        upgradeChoice = rand() % 2 + 1;
+
+        switch(upgradeChoice)
+        {
+            case 1:
+            upgradeTextureAttackspeed.loadFromFile("assets/graphics/upgradeAttackspeed.png");
+            upgrade.setTexture(upgradeTextureAttackspeed);
+            break;
+
+            case 2:
+    	    upgradeTextureAutofire.loadFromFile("assets/graphics/upgradeAutofire.png");
+            upgrade.setTexture(upgradeTextureAutofire);
+            break;
+        }
+
+        upgrade.setOrigin(upgrade.getGlobalBounds().width / 2, upgrade.getGlobalBounds().height / 2);
+        upgrade.setPosition(rand() % static_cast<int>(videoMode.width - this->upgrade.getGlobalBounds().width / 2), rand() % static_cast<int>(videoMode.height - this->upgrade.getGlobalBounds().height / 2));
+            
+        upgradesInt.push_back(upgradeChoice);
+        upgrades.push_back(upgrade);
+    }
+
+    for(int i = 0; i < upgrades.size(); i++)
+        if(ship.getGlobalBounds().intersects(upgrades[i].getGlobalBounds()))
+        {
+            switch(upgradesInt[i])
+            {
+                case 1:
+                    upgradeAttackspeed += 0.5f;
+                break;
+                
+                case 2:
+                    upgradeAutofire = true;
+                break;
+            }
+
+            upgrades.erase(upgrades.begin() + i);
+            upgradesInt.erase(upgradesInt.begin() + i);
+        }
+}
+
 
 // Render Stuff
 
@@ -223,4 +283,13 @@ void Starship::renderShip(sf::RenderTarget& target)
 
     //Render Ship
     target.draw(ship);
+    renderUpgrades(target);
+}
+
+void Starship::renderUpgrades(sf::RenderTarget& target)
+{
+    for(auto &e : this->upgrades)
+    {
+        target.draw(e);
+    }
 }

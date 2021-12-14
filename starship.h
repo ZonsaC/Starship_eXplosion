@@ -24,11 +24,13 @@ public:
     void getPoints();
 
     //Render
-    void renderShip(sf::RenderTarget& target);
+    void renderShip(sf::RenderTarget&);
+    void renderUpgrades(sf::RenderTarget&);
 
     //Update
     void updateShip(bool, bool);
     void updateBullet();
+    void updateUpgrades();
     void controlShip();
 
     //Constructor/Destructor
@@ -47,8 +49,16 @@ private:
     std::vector<sf::Sprite> bullets;
     sf::Time time;
 
+    //Upgrades
+    sf::Sprite upgrade;
+    sf::Texture upgradeTextureAttackspeed;
+    sf::Texture upgradeTextureAutofire;
+    std::vector<sf::Sprite> upgrades;
+    std::vector<int> upgradesInt;
+
     //Variables
     bool isHold;
+    bool isUpgradeSet;
     float destroyTextureSpeed;
     float curDestroyTexture;
     bool attackV;
@@ -59,6 +69,11 @@ private:
     float acceleration;
     float speedCur;
     float tempRotation;
+
+    bool upgradeAutofire;
+    int upgradeChoice;
+
+    float upgradeAttackspeed;
 
     //Init
     void initVariables();
