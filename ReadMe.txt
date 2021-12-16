@@ -13,15 +13,15 @@ Todo:
 
 - Upgrades
     - Spawning Upgrades
-        - Faster Attackspeed
-        - Autoshoot
+        - Faster Attackspeed                    -- Done
+        - Autoshoot                             -- Done
         - Spread
-        - Faster Movement
+        - Faster Movement                       -- Done
         - Shield
         - Extra Life
         - More Bullets on Hit
         - Smaller Ship
-        - Bullet increase size while travel
+        - Bullet increase size while travel     -- Done
 
 - Raumschiff
     - Physics                   -- Done

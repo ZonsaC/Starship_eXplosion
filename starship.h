@@ -53,6 +53,9 @@ private:
     sf::Sprite upgrade;
     sf::Texture upgradeTextureAttackspeed;
     sf::Texture upgradeTextureAutofire;
+    sf::Texture upgradeTextureMovementspeed;
+    sf::Texture upgradeTextureBulletScale;
+
     std::vector<sf::Sprite> upgrades;
     std::vector<int> upgradesInt;
 
@@ -74,6 +77,9 @@ private:
     int upgradeChoice;
 
     float upgradeAttackspeed;
+    float upgradeMovementspeed;
+    float upgradeBulletScale;
+    int upgradeMoreBullets;
 
     //Init
     void initVariables();

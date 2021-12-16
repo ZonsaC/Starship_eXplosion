@@ -37,13 +37,17 @@ void Starship::initVariables()
     tempRotation = 0.f;
     attack = 0.f;
     curDestroyTexture = 0.f;
-    upgradeAttackspeed = 1.f;
 
-    
+    upgradeAttackspeed = 1.f;
+    upgradeMovementspeed = 1.f;
+    upgradeBulletScale = 1.f;
+    upgradeMoreBullets = 0;
+    upgrades.clear();
+    upgradesInt.clear();
 
     //Parameters
     acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
-    speedMax = 0.1f; //Max Speed the Ship travels -- Normal 0.1f
+    speedMax = 0.07f; //Max Speed the Ship travels -- Normal 0.1f
     attackSpeed = 5000.f; //Max Attackspeed - HigherNumber = LongerWaittime 
     destroyTextureSpeed = 1.f; //Texture changespeed when destroyed
 }
@@ -90,7 +94,7 @@ void Starship::controlShip()
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        if(speedCur < speedMax)
+        if(speedCur < speedMax * upgradeMovementspeed)
             speedCur += acceleration;
 
         ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
@@ -166,10 +170,11 @@ void Starship::getPoints()
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::P) && !isHold)
     {
         isHold = true;
-        points += 1;
+        points += 5;
         std::cout << points << "\n";
 
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) isHold = false;
+
 }
 
 
@@ -203,17 +208,20 @@ void Starship::updateShip(bool retry, bool startBool)
 
 void Starship::updateBullet() 
 {
+
     for(int i = 0; i < bullets.size(); i++)
     {
         //Move Bullets
+        bullets[i].scale(1 * upgradeBulletScale, 1 * upgradeBulletScale);
+        bullets[i].setOrigin(bullets[i].getLocalBounds().width / 2, bullets[i].getLocalBounds().height / 2);
+
         bullets[i].move(sin((bullets[i].getRotation() / 180) * 3.14) / 5, -1 * cos((bullets[i].getRotation() / 180) * 3.14) / 5);
 
         //Destroy Bullets outside of screen
         if(bullets[i].getPosition().x > videoMode.width + 30 || bullets[i].getPosition().y > videoMode.height + 30 || bullets[i].getPosition().x <= -30 || bullets[i].getPosition().y <= -30){
             bullets.erase(bullets.begin() + i);
         }
-    }
-        
+    }       
 
 }
 
@@ -229,7 +237,10 @@ void Starship::updateUpgrades()
     {
         isUpgradeSet = false;
 
-        upgradeChoice = rand() % 2 + 1;
+        upgradeChoice = rand() % 4 + 1;
+        if(upgradeAutofire)
+            while(upgradeChoice == 2)
+                upgradeChoice = rand() % 4 + 1;
 
         switch(upgradeChoice)
         {
@@ -241,6 +252,16 @@ void Starship::updateUpgrades()
             case 2:
     	    upgradeTextureAutofire.loadFromFile("assets/graphics/upgradeAutofire.png");
             upgrade.setTexture(upgradeTextureAutofire);
+            break;
+
+            case 3:
+            upgradeTextureMovementspeed.loadFromFile("assets/graphics/upgradeMovementspeed.png");
+            upgrade.setTexture(upgradeTextureMovementspeed);
+            break;
+
+            case 4:
+            upgradeTextureBulletScale.loadFromFile("assets/graphics/upgradeBulletScale.png");
+            upgrade.setTexture(upgradeTextureBulletScale);
             break;
         }
 
@@ -263,6 +284,14 @@ void Starship::updateUpgrades()
                 case 2:
                     upgradeAutofire = true;
                 break;
+
+                case 3:
+                    upgradeMovementspeed += 0.1f;
+                break;
+
+                case 4:
+                    upgradeBulletScale += 0.000075;
+                break;
             }
 
             upgrades.erase(upgrades.begin() + i);
@@ -283,7 +312,8 @@ void Starship::renderShip(sf::RenderTarget& target)
 
     //Render Ship
     target.draw(ship);
-    renderUpgrades(target);
+    if(!destroyShipBool)
+        renderUpgrades(target);
 }
 
 void Starship::renderUpgrades(sf::RenderTarget& target)
