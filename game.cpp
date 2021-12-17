@@ -49,7 +49,8 @@ const bool Game::getWindowIsOpen() const
 void Game::pollEvent()
 {
 while(this->window->pollEvent(this->ev))
-    {
+{
+    screens->pollEvent(ev);
     switch(this->ev.type)
     {
         case sf::Event::Closed:
@@ -68,7 +69,7 @@ void Game::update()
     //Event polling
     this->pollEvent();
     screens->updateScreens(starship->destroyShipBool, starship->points);
-    starship->updateShip(screens->retryBool, screens->startBool);
+    starship->updateShip(screens->retryBool, screens->startBool, screens->reload);
     enemy->updateAsteroids();
 }
 

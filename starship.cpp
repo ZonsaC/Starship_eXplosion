@@ -182,7 +182,8 @@ void Starship::getPoints()
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::O) && !isHold2)
     {
         isHold2 = true;
-        spreadBullets();
+        if(bullets.size() > 0)
+            spreadBullets();
 
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::O)) isHold2 = false;
 
@@ -190,7 +191,6 @@ void Starship::getPoints()
 
 void Starship::spreadBullets() 
 {
-    std::cout << upgradeSpread << "\n";
     for(int i = 0; i < upgradeSpread; i++)
     {
         rotationSpread = rotationSpread + (360 / upgradeSpread);
@@ -211,8 +211,16 @@ void Starship::spreadBullets()
 
 //Update Stuff
 
-void Starship::updateShip(bool retry, bool startBool)
+void Starship::updateShip(bool retry, bool startBool, bool reload)
 {
+    if(reload)
+    {
+        initVariables();
+        initBullet(); 
+        initShip();
+        destroyShipBool = false;
+    }
+
     if(retry)
     {
         initVariables();

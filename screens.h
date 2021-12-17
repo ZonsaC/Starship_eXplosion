@@ -13,9 +13,12 @@
 class Screens
 {
 public:
+    std::string username;
+    
     bool startBool;
     bool endBool;
     bool retryBool;
+    bool reload;
 
     // Constructor / Destructor
     Screens();
@@ -24,6 +27,9 @@ public:
 
     //Functions
     void initValues(sf::RenderWindow*);
+
+    //Poll Event
+    void pollEvent(sf::Event);
 
     //Update
     void updateScreens(bool, int);
@@ -52,6 +58,9 @@ private:
     sf::Sprite startButton;
     bool isHeld;
 
+    bool isHeld2;
+    
+
     sf::Texture t_startScreen;
     sf::Texture t_startButton;
 
@@ -61,6 +70,8 @@ private:
     float increaseSpeed;
 
     sf::Text endText;
+    sf::Text enterUsername;
+    
 
     //Retry Button
     sf::Text retryText;

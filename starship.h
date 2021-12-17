@@ -29,7 +29,7 @@ public:
     void renderUpgrades(sf::RenderTarget&);
 
     //Update
-    void updateShip(bool, bool);
+    void updateShip(bool, bool, bool);
     void updateBullet();
     void updateUpgrades();
     void controlShip();

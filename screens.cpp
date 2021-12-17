@@ -6,11 +6,11 @@
 
 
 // Constructor / Destructor
-Screens::Screens() 
+Screens::Screens()
 {
 }
 
-Screens::Screens(sf::RenderWindow* pointerWindow) 
+Screens::Screens(sf::RenderWindow* pointerWindow)
 {
     initValues(pointerWindow);
     initPointstext();
@@ -22,7 +22,7 @@ Screens::Screens(sf::RenderWindow* pointerWindow)
     initRetrybutton();
 }
 
-Screens::~Screens() 
+Screens::~Screens()
 {
 }
 
@@ -33,14 +33,15 @@ void Screens::initVariables()
     isHeld = false;
     startBool = false;
     retryBool = false;
+    isHeld2 = false;
+    reload = false;
 
     Hue = 0;
     increaseSpeed = 0.025f;
     curIncSpeed = 0.f;
 }
 
-
-void Screens::initValues(sf::RenderWindow* pointerWindow) 
+void Screens::initValues(sf::RenderWindow* pointerWindow)
 {
     window = pointerWindow;
     videoMode.width = window->getSize().x;
@@ -77,7 +78,7 @@ void Screens::initStarttext()
     startText.setCharacterSize(80);
     startText.setFillColor(sf::Color::White);
 
-    startText.setOrigin(startText.getLocalBounds().left + startText.getLocalBounds().width / 2, 
+    startText.setOrigin(startText.getLocalBounds().left + startText.getLocalBounds().width / 2,
                         startText.getLocalBounds().top + startText.getLocalBounds().height / 2);
     startText.setPosition(startButton.getPosition().x, startButton.getPosition().y);
 }
@@ -89,9 +90,15 @@ void Screens::initEndscreen()
     endText.setCharacterSize(200);
     endText.setString("Game Over");
 
-    endText.setOrigin(endText.getLocalBounds().left + endText.getLocalBounds().width / 2, 
+    endText.setOrigin(endText.getLocalBounds().left + endText.getLocalBounds().width / 2,
                       endText.getLocalBounds().top + endText.getLocalBounds().height / 2);
     endText.setPosition(videoMode.width / 2, videoMode.height / 2 - 100);
+
+    //Init EnterUsername
+    enterUsername.setFont(f_startText);
+    enterUsername.setCharacterSize(40);
+
+    enterUsername.setPosition(videoMode.width / 2 - 150, videoMode.height / 2 + 200);
 }
 
 void Screens::initRetrybutton()
@@ -106,7 +113,7 @@ void Screens::initRetrybutton()
     retryText.setString("Retry");
     retryText.setCharacterSize(80);
     retryText.setFillColor(sf::Color::White);
-    retryText.setOrigin(retryText.getLocalBounds().left + retryText.getLocalBounds().width / 2, 
+    retryText.setOrigin(retryText.getLocalBounds().left + retryText.getLocalBounds().width / 2,
                         retryText.getLocalBounds().top + retryText.getLocalBounds().height / 2);
     retryText.setPosition(retryButton.getPosition());
 
@@ -119,8 +126,42 @@ void Screens::initPointstext()
     pointsText.setPosition(10, 0);
 }
 
+
+//Poll Event
+void Screens::pollEvent(sf::Event ev)
+{
+    //Enter Username
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !isHeld2 && username.size() > 0)
+    {
+
+        isHeld2 = true;
+        username.erase(username.size() - 1);
+
+    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) isHeld2 = false;
+
+    if(endBool)
+        if (ev.type == sf::Event::TextEntered && !sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+        {
+            if (ev.text.unicode < 128)
+            {
+                username += (static_cast<char>(ev.text.unicode));
+            }
+        }
+
+    enterUsername.setString("Enter Username: \n" + username);
+
+    //Confirm Username
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    {
+        startBool = false;
+        reload = true;
+    }
+    
+
+}
+
 //Update
-void Screens::updateScreens(bool end, int p) 
+void Screens::updateScreens(bool end, int p)
 {
     //Init when ship is dead
     endBool = end;
@@ -130,7 +171,7 @@ void Screens::updateScreens(bool end, int p)
     }
 
     updateEndtext();
-    
+
     //Leftclick Event
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
@@ -142,6 +183,9 @@ void Screens::updateScreens(bool end, int p)
             //When mouse is on startButton
             if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
+                username.erase();
+
+                reload = false;
                 startBool = true;
             }
 
@@ -154,7 +198,7 @@ void Screens::updateScreens(bool end, int p)
 
     } else isHeld = false;
 
-    
+
     std::stringstream ss;
     ss << "Points: " << p;
     pointsText.setString(ss.str());
@@ -172,6 +216,7 @@ void Screens::updateEndtext()
             endText.setFillColor(sf::Color(255, 255, 255, Hue));
             retryButton.setColor(sf::Color(255, 255, 255, Hue));
             retryText.setFillColor(sf::Color(255, 255, 255, Hue));
+            enterUsername.setFillColor(sf::Color(255, 255, 255, Hue));
         }
 }
 
@@ -182,16 +227,16 @@ void Screens::updateMousepos()
 
 
 //Render
-void Screens::renderScreens(sf::RenderTarget& target) 
+void Screens::renderScreens(sf::RenderTarget& target)
 {
     if(!startBool){
         //Start Screen
         target.draw(startScreen);
         target.draw(startButton);
         target.draw(startText);
-        
+
     } else {
-        if(!endBool && startBool)
+        if(!endBool)
         // While Game
         target.draw(pointsText);
     }
@@ -200,8 +245,9 @@ void Screens::renderScreens(sf::RenderTarget& target)
     {
         //End Screen
         target.draw(endText);
+        target.draw(enterUsername);
         target.draw(retryButton);
         target.draw(retryText);
     }
-        
+
 }
