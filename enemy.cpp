@@ -1,15 +1,17 @@
 #include "game.h"
 #include "enemy.h"
+#include "math.h"
 
 Enemy::Enemy() 
-{
-    
+{  
 }
 
-Enemy::Enemy(int width, int height) 
+Enemy::Enemy(sf::RenderWindow* window) 
 {
-    windowValues(width, height);
-    initAsteroid();
+    windowValues(window);
+
+    initVariables();
+    initEnemy();
 }
 
 Enemy::~Enemy()
@@ -17,72 +19,137 @@ Enemy::~Enemy()
 
 }
 
-void Enemy::initAsteroid(){
+void Enemy::initVariables()
+{
+    maxEnemy = 10;
+
+    enemySpawnTimer = 0;
+    enemySpawnTimerMax = 5000;
+
+    randomEnemyScale = 0;
+    enemySpawnPos = 0;
+    enemiesInt.clear();
+    enemies.clear();
+}
+
+void Enemy::initEnemy(){
     texture.loadFromFile("assets/graphics/enemy.png");
-    asteroid.setTexture(texture);
-    asteroid.setOrigin(asteroid.getGlobalBounds().width/2, asteroid.getGlobalBounds().height/2);
-    asteroid.setPosition(0, -1*asteroid.getGlobalBounds().height);
+    enemy.setTexture(texture);
+    enemy.setPosition(0, -1*enemy.getGlobalBounds().height);
 }
 
-void Enemy::windowValues(int width, int height) 
+
+//Funktionen
+
+void Enemy::windowValues(sf::RenderWindow* window) 
 {
-    videoMode.width = width;
-    videoMode.height = height;
+    videoMode.width = window->getSize().x;
+    videoMode.height = window->getSize().y;
 }
 
-void Enemy::spawnAsteroid() 
+void Enemy::spawnEnemy() 
 {
+    randomEnemyScale = rand() % 100 + 50;
+
+    enemy.setScale(randomEnemyScale / 100, randomEnemyScale / 100);
+    enemy.setOrigin(enemy.getGlobalBounds().width / 2, enemy.getGlobalBounds().height / 2);
     
-    int pos = rand() % 4;
+    enemySpawnPos = rand() % 4;
 
-    switch (0)
-    {
-    case 0:
-        //oben
-         for (int i = 0; i < asteroids.size(); i++)
+
+    //Spawns Enemy
+    switch (enemySpawnPos)
         {
-            while (asteroid.getGlobalBounds().intersects(asteroids[i].getGlobalBounds()))
-            {
-                length = videoMode.width + asteroid.getGlobalBounds().width;
-                
-                asteroid.setPosition(rand() % length + (-1*asteroid.getGlobalBounds().width/2), -1*asteroid.getGlobalBounds().height);
+        case 0:
+            //oben
+                enemy.setPosition(rand() % static_cast<int>(videoMode.width + enemy.getGlobalBounds().width * 2) + (-1 * enemy.getGlobalBounds().width), (-1 * enemy.getGlobalBounds().height / 2));
+                enemy.setRotation(rand() % 40 + 160);
+            break;
+        case 1:
+            //rechts
+                enemy.setPosition((videoMode.width + enemy.getGlobalBounds().width / 2), rand() % static_cast<int>(videoMode.height + enemy.getGlobalBounds().height * 2) + (-1 * enemy.getGlobalBounds().height));
+                enemy.setRotation(rand() % 40 + 250);
+            break;
+        case 2:
+            //unten
+                enemy.setPosition(rand() % static_cast<int>(videoMode.width + enemy.getGlobalBounds().width * 2) + (-1 * enemy.getGlobalBounds().width),  (videoMode.height + enemy.getGlobalBounds().height));
+                enemy.setRotation(rand() % 40 + 340);
+            break;
+        case 3:
+            //links
+                enemy.setPosition((-1 * enemy.getGlobalBounds().width / 2), rand() % static_cast<int>(videoMode.height + enemy.getGlobalBounds().height * 2) + (-1 * enemy.getGlobalBounds().height));
+                enemy.setRotation(rand() % 40 + 70);
+            break;
+        }
+    
+    enemiesInt.push_back(enemySpawnPos);
+    enemies.push_back(enemy);
+}
+
+void Enemy::moveEnemies()
+{
+    for(int i = 0; i < enemies.size(); i++)
+    {
+        enemies[i].move(sin((enemies[i].getRotation() / 180) * 3.14) * 0.1, -1 * cos((enemies[i].getRotation() / 180) * 3.14) * 0.1);
+    }
+}
+
+void Enemy::destroyEnemies()
+{
+    for(int i = 0; i < enemies.size(); i++)
+    {
+        switch (enemiesInt[i])
+        {
+        case 0:
+            if(enemies[i].getPosition().y > videoMode.height + enemies[i].getGlobalBounds().height){
+                enemies.erase(enemies.begin() + i);
+                enemiesInt.erase(enemiesInt.begin() + i);
             }
-        }    
-        break;
-    case 1:
-        //rechts
-        break;
-    case 2:
-        //unten
-        break;
-    case 3:
-        //links
-        break;
+            break;
+        case 1:
+            if(enemies[i].getPosition().x < -1 * enemies[i].getGlobalBounds().width){
+                enemies.erase(enemies.begin() + i);
+                enemiesInt.erase(enemiesInt.begin() + i);
+            }
+            break;
+        case 2:
+            if(enemies[i].getPosition().y < -1 * enemies[i].getGlobalBounds().height){
+                enemies.erase(enemies.begin() + i);
+                enemiesInt.erase(enemiesInt.begin() + i);
+            }
+            break;
+        case 3:
+            if(enemies[i].getPosition().x > videoMode.width + enemies[i].getGlobalBounds().width){
+                enemies.erase(enemies.begin() + i);
+                enemiesInt.erase(enemiesInt.begin() + i);
+            }
+            break;
+        }
     }
-        
-    std::cout << asteroid.getPosition().x << " " << asteroid.getPosition().y << "\n";
-    asteroids.push_back(asteroid);
 }
 
-void Enemy::updateAsteroids() 
+
+void Enemy::updateEnemies() 
 {
-    if (asteroids.size() < maxAsteroid)
+
+    if (enemies.size() < maxEnemy)
     {
-        if (asteroidSpawnTimer >= asteroidSpawnTimerMax)
+        if (enemySpawnTimer >= enemySpawnTimerMax)
         {
-            spawnAsteroid();
-            asteroidSpawnTimer = 0;
+            spawnEnemy();
+            enemySpawnTimer = 0;
         }else
-            asteroidSpawnTimer += 1;
+            enemySpawnTimer += 1;
     }
     
-    
+    moveEnemies();
+    destroyEnemies();
 }
 
-void Enemy::renderAsteroids(sf::RenderTarget& target) 
+void Enemy::renderEnemies(sf::RenderTarget& target) 
 {
     
-    for (auto &i : asteroids)
+    for (auto &i : enemies)
     {
         target.draw(i);
     }
