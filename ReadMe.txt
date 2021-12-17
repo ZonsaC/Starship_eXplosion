@@ -3,9 +3,9 @@ Hey,
 Todo:
 - Background parallax
 
-- Startscreen
+- Startscreen                                   -- Done
 
-- Endscreen
+- Endscreen                                     -- Done
 
 - Score
 
@@ -15,12 +15,12 @@ Todo:
     - Spawning Upgrades
         - Faster Attackspeed                    -- Done
         - Autoshoot                             -- Done
-        - Spread                                -- Done
+        - Spread                                
         - Faster Movement                       -- Done
         - Shield
         - Extra Life
-        - More Bullets on Hit
-        - Smaller Ship
+        - More Bullets on Hit                   -- Done
+        - Smaller Ship                          -- Done
         - Bullet increase size while travel     -- Done
 
 - Raumschiff

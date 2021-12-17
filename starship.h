@@ -57,9 +57,12 @@ private:
     sf::Texture upgradeTextureMovementspeed;
     sf::Texture upgradeTextureBulletScale;
     sf::Texture upgradeTextureSpread;
+    sf::Texture upgradeTextureSmall;
 
     std::vector<sf::Sprite> upgrades;
     std::vector<int> upgradesInt;
+
+    std::vector<int> SperrUpgrade;
 
     //Variables
     bool isHold;
@@ -74,6 +77,7 @@ private:
     float acceleration;
     float speedCur;
     float tempRotation;
+    bool ValOk;
     
     //to Test Spreadsystem
     bool isHold2 = false;
@@ -89,6 +93,7 @@ private:
     float upgradeBulletScale;
     int upgradeSpread;
     bool upgradeAutofire;
+    float upgradeSmallerShip;
 
     //Init
     void initVariables();

@@ -2,6 +2,8 @@
 #include "starship.h"
 #include <math.h>
 
+#include <algorithm>
+
 //Constructor/Destructor
 
 Starship::Starship()
@@ -24,6 +26,12 @@ Starship::~Starship()
 
 void Starship::initVariables() 
 {
+    /*
+
+        All Variables Stored
+
+    */
+
     // Dont change
     upgradeAutofire = false;
     isUpgradeSet = false;
@@ -31,6 +39,7 @@ void Starship::initVariables()
     destroyShipBool = false;
     isHold = false;
     attackV = false;
+    ValOk = false;
 
     bulletSpread = false;
 
@@ -45,9 +54,11 @@ void Starship::initVariables()
     upgradeAttackspeed = 1.f;
     upgradeMovementspeed = 1.f;
     upgradeBulletScale = 1.f;
+    upgradeSmallerShip = 1.f;
     upgradeSpread = 0;
     upgrades.clear();
     upgradesInt.clear();
+    SperrUpgrade.clear();
 
     //Parameters
     acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
@@ -86,6 +97,15 @@ void Starship::initBullet()
 
 void Starship::controlShip() 
 {
+    /*
+
+        Keyboard inputs
+        - Controls Ship
+        - Shoot on Space 
+        - Movementspeed decrease on release
+
+    */
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         ship.rotate(-1 * 0.06);
@@ -140,12 +160,23 @@ void Starship::controlShip()
 
 void Starship::windowValues(int width, int height) 
 {
+    /*
+
+        Loads Window Values
+
+    */
+
     Starship::videoMode.width = width;
     Starship::videoMode.height = height;
 }
 
 void Starship::spawnBullet() 
 {
+    /*
+
+        Adds Bullet to Vector
+
+    */
     bullet.setRotation(ship.getRotation());
     bullet.setPosition(ship.getPosition().x, ship.getPosition().y);
 
@@ -154,8 +185,15 @@ void Starship::spawnBullet()
 
 void Starship::destroyShip()
 {
-    if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
+    /*
 
+        Destroys Ship
+        - Destroy Animation
+        - Set destroy bool
+
+    */
+
+    if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
         if(curDestroyTexture < texture.getSize().x * 4)
         {
             curDestroyTexture += destroyTextureSpeed;
@@ -171,11 +209,21 @@ void Starship::destroyShip()
 
 void Starship::getPoints() 
 {
+    /*
+
+        -- TEMPORARY --
+
+        Inputs
+        - On Press [P] 5
+        - On Press [O] Spread
+
+    */
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::P) && !isHold)
     {
         isHold = true;
         points += 5;
-        std::cout << points << "\n";
+        // std::cout << points << "\n";
 
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) isHold = false;
 
@@ -191,16 +239,21 @@ void Starship::getPoints()
 
 void Starship::spreadBullets() 
 {
+    /*
+
+        Spreads Bullets
+        Erase first Bullet
+        Adds Bullets to vector
+
+    */
+
     for(int i = 0; i < upgradeSpread; i++)
     {
         rotationSpread = rotationSpread + (360 / upgradeSpread);
 
-        std::cout << rotationSpread << "\n";
-
         bullet.setPosition(bullets[0].getPosition());
         bullet.setRotation(rotationSpread);
 
-        
         bullets.push_back(bullet);
     }
 
@@ -213,6 +266,12 @@ void Starship::spreadBullets()
 
 void Starship::updateShip(bool retry, bool startBool, bool reload)
 {
+    /*
+
+        Inits when restart
+
+    */
+
     if(reload)
     {
         initVariables();
@@ -247,6 +306,13 @@ void Starship::updateShip(bool retry, bool startBool, bool reload)
 
 void Starship::updateBullet() 
 {
+    /*
+
+        Moves Bullets
+        Destroys Bullets outside from screen
+
+    */
+
 
     for(int i = 0; i < bullets.size(); i++)
     {
@@ -266,8 +332,13 @@ void Starship::updateBullet()
 
 void Starship::updateUpgrades() 
 {
+    /*
 
-    //Chose Upgrade
+        Upgrade System
+
+    */
+
+    //Choose Upgrade
     if(points % 10 != 0)
     {
         isUpgradeSet = true;
@@ -276,11 +347,13 @@ void Starship::updateUpgrades()
     {
         isUpgradeSet = false;
 
-        upgradeChoice = rand() % 5 + 1;
-
-        if(upgradeAutofire)
-            while(upgradeChoice == 2)
-                upgradeChoice = rand() % 5 + 1;
+        ValOk = false;
+        while (!ValOk)
+        {
+            upgradeChoice = rand() % 6 + 1;
+            if(!(std::find(SperrUpgrade.begin(), SperrUpgrade.end(), upgradeChoice) != SperrUpgrade.end()) || upgradeChoice == 0) ValOk = true;
+        }
+            
 
         switch(upgradeChoice)
         {
@@ -308,6 +381,11 @@ void Starship::updateUpgrades()
                 upgradeTextureSpread.loadFromFile("assets/graphics/upgradeSpread.png");
                 upgrade.setTexture(upgradeTextureSpread);
             break;
+
+            case 6:
+                upgradeTextureSmall.loadFromFile("assets/graphics/upgradeSmallShip.png");
+                upgrade.setTexture(upgradeTextureSmall);
+            break;
         }
 
         upgrade.setOrigin(upgrade.getGlobalBounds().width / 2, upgrade.getGlobalBounds().height / 2);
@@ -328,20 +406,54 @@ void Starship::updateUpgrades()
                 
                 case 2:
                     upgradeAutofire = true;
+                    SperrUpgrade.push_back(2);
                 break;
 
                 case 3:
                     upgradeMovementspeed += 0.1f;
+
+                    if(upgradeMovementspeed > 2.2)
+                    {
+                        SperrUpgrade.push_back(3);
+                        upgradeMovementspeed = 2.2;
+                    }
+                        
                 break;
 
                 case 4:
                     upgradeBulletScale += 0.000075;
+
+                    if(upgradeBulletScale > 1.00052)
+                    {
+                        SperrUpgrade.push_back(4);
+                        upgradeBulletScale = 1.00052;
+                    }
+                        
                 break;
 
                 case 5:
                     do
                         upgradeSpread += 1;
                     while(!(360 % upgradeSpread == 0));
+
+                    if(upgradeSpread > 360)
+                    {
+                        SperrUpgrade.push_back(5);
+                        upgradeSpread = 360;
+                    }
+                        
+                break;
+
+                case 6:
+                    upgradeSmallerShip -= 0.025;
+                    ship.scale(upgradeSmallerShip, upgradeSmallerShip);
+                    std::cout << upgradeSmallerShip << "\n";
+
+                    if(upgradeSmallerShip < 0.85)
+                    {
+                        SperrUpgrade.push_back(6);
+                        upgradeSmallerShip = 0.85;
+                    }
                 break;
             }
 
