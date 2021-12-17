@@ -31,17 +31,21 @@ void Starship::initVariables()
     destroyShipBool = false;
     isHold = false;
     attackV = false;
+
+    bulletSpread = false;
+
     upgradeChoice = 0;
     points = 0;
     speedCur = 0.f;
     tempRotation = 0.f;
     attack = 0.f;
     curDestroyTexture = 0.f;
+    rotationSpread = 0.f;
 
     upgradeAttackspeed = 1.f;
     upgradeMovementspeed = 1.f;
     upgradeBulletScale = 1.f;
-    upgradeMoreBullets = 0;
+    upgradeSpread = 0;
     upgrades.clear();
     upgradesInt.clear();
 
@@ -175,6 +179,33 @@ void Starship::getPoints()
 
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) isHold = false;
 
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::O) && !isHold2)
+    {
+        isHold2 = true;
+        spreadBullets();
+
+    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::O)) isHold2 = false;
+
+}
+
+void Starship::spreadBullets() 
+{
+    std::cout << upgradeSpread << "\n";
+    for(int i = 0; i < upgradeSpread; i++)
+    {
+        rotationSpread = rotationSpread + (360 / upgradeSpread);
+
+        std::cout << rotationSpread << "\n";
+
+        bullet.setPosition(bullets[0].getPosition());
+        bullet.setRotation(rotationSpread);
+
+        
+        bullets.push_back(bullet);
+    }
+
+    bullets.erase(bullets.begin());
+    rotationSpread = 0;
 }
 
 
@@ -237,31 +268,37 @@ void Starship::updateUpgrades()
     {
         isUpgradeSet = false;
 
-        upgradeChoice = rand() % 4 + 1;
+        upgradeChoice = rand() % 5 + 1;
+
         if(upgradeAutofire)
             while(upgradeChoice == 2)
-                upgradeChoice = rand() % 4 + 1;
+                upgradeChoice = rand() % 5 + 1;
 
         switch(upgradeChoice)
         {
             case 1:
-            upgradeTextureAttackspeed.loadFromFile("assets/graphics/upgradeAttackspeed.png");
-            upgrade.setTexture(upgradeTextureAttackspeed);
+                upgradeTextureAttackspeed.loadFromFile("assets/graphics/upgradeAttackspeed.png");
+                upgrade.setTexture(upgradeTextureAttackspeed);
             break;
 
             case 2:
-    	    upgradeTextureAutofire.loadFromFile("assets/graphics/upgradeAutofire.png");
-            upgrade.setTexture(upgradeTextureAutofire);
+                upgradeTextureAutofire.loadFromFile("assets/graphics/upgradeAutofire.png");
+                upgrade.setTexture(upgradeTextureAutofire);
             break;
 
             case 3:
-            upgradeTextureMovementspeed.loadFromFile("assets/graphics/upgradeMovementspeed.png");
-            upgrade.setTexture(upgradeTextureMovementspeed);
+                upgradeTextureMovementspeed.loadFromFile("assets/graphics/upgradeMovementspeed.png");
+                upgrade.setTexture(upgradeTextureMovementspeed);
             break;
 
             case 4:
-            upgradeTextureBulletScale.loadFromFile("assets/graphics/upgradeBulletScale.png");
-            upgrade.setTexture(upgradeTextureBulletScale);
+                upgradeTextureBulletScale.loadFromFile("assets/graphics/upgradeBulletScale.png");
+                upgrade.setTexture(upgradeTextureBulletScale);
+            break;
+
+            case 5:
+                upgradeTextureSpread.loadFromFile("assets/graphics/upgradeSpread.png");
+                upgrade.setTexture(upgradeTextureSpread);
             break;
         }
 
@@ -291,6 +328,12 @@ void Starship::updateUpgrades()
 
                 case 4:
                     upgradeBulletScale += 0.000075;
+                break;
+
+                case 5:
+                    do
+                        upgradeSpread += 1;
+                    while(!(360 % upgradeSpread == 0));
                 break;
             }
 

@@ -15,7 +15,7 @@ Todo:
     - Spawning Upgrades
         - Faster Attackspeed                    -- Done
         - Autoshoot                             -- Done
-        - Spread
+        - Spread                                -- Done
         - Faster Movement                       -- Done
         - Shield
         - Extra Life

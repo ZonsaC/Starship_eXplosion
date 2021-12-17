@@ -22,6 +22,7 @@ public:
     void spawnBullet();
     void destroyShip();
     void getPoints();
+    void spreadBullets();
 
     //Render
     void renderShip(sf::RenderTarget&);
@@ -55,6 +56,7 @@ private:
     sf::Texture upgradeTextureAutofire;
     sf::Texture upgradeTextureMovementspeed;
     sf::Texture upgradeTextureBulletScale;
+    sf::Texture upgradeTextureSpread;
 
     std::vector<sf::Sprite> upgrades;
     std::vector<int> upgradesInt;
@@ -72,14 +74,21 @@ private:
     float acceleration;
     float speedCur;
     float tempRotation;
+    
+    //to Test Spreadsystem
+    bool isHold2 = false;
 
-    bool upgradeAutofire;
+    //Variables that help upgrades
     int upgradeChoice;
+    float rotationSpread;
+    bool bulletSpread;
 
+    //Variables that change Game behavior
     float upgradeAttackspeed;
     float upgradeMovementspeed;
     float upgradeBulletScale;
-    int upgradeMoreBullets;
+    int upgradeSpread;
+    bool upgradeAutofire;
 
     //Init
     void initVariables();
