@@ -10,10 +10,10 @@ void Game::initVariables()
 void Game::initWindow() 
 {
 
-    this->videoMode.width = 1280;
-    this->videoMode.height = 720;
+    this->videoMode.width = 1920;
+    this->videoMode.height = 1080;
     
-    this->window = new sf::RenderWindow(this->videoMode, "Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+    this->window = new sf::RenderWindow(this->videoMode, "Window",sf::Style::Close | sf::Style::Fullscreen);
 
     this->texture.loadFromFile("assets/graphics/background.png");
     background.setTexture(texture);

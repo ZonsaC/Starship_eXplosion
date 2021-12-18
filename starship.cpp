@@ -184,17 +184,6 @@ void Starship::spawnBullet()
     bullets.push_back(bullet);
 }
 
-void Starship::changeHitbox(sf::Sprite e)
-{
-    enemyHitbox = e;
-
-    enemyHitbox.setRotation(0);
-    enemyHitbox.scale(0.8, 0.8);
-    enemyHitbox.setOrigin(enemyHitbox.getLocalBounds().left + enemyHitbox.getLocalBounds().width / 2,
-                          enemyHitbox.getLocalBounds().top + enemyHitbox.getLocalBounds().height / 2);
-    enemyHitbox.setPosition(e.getPosition());
-}
-
 void Starship::destroyShip()
 {
     /*
@@ -207,13 +196,11 @@ void Starship::destroyShip()
 
     for(int i = 0; i < enemies.size(); i++)
     {
-        changeHitbox(enemies[i]);
-
         if(ship.getPosition().x > videoMode.width || 
            ship.getPosition().y > videoMode.height || 
            ship.getPosition().x <= 0 || 
            ship.getPosition().y <= 0 || 
-           ship.getGlobalBounds().intersects(enemyHitbox.getGlobalBounds()))
+           ship.getGlobalBounds().intersects(enemies[i].getGlobalBounds()))
            {
             if(curDestroyTexture < texture.getSize().x * 4)
             {
@@ -256,9 +243,7 @@ void Starship::enemyBulletIntersect()
     for(int i = 0; i < bullets.size(); i++)
         for(int j = 0; j < enemies.size(); j++)
         {
-            changeHitbox(enemies[j]);
-
-            if(bullets[i].getGlobalBounds().intersects(enemyHitbox.getGlobalBounds()))
+            if(bullets[i].getGlobalBounds().intersects(enemies[j].getGlobalBounds()))
             {
                 points++;
                 enemies.erase(enemies.begin() + j);

@@ -18,7 +18,6 @@ public:
     sf::VideoMode videoMode;
 
     std::vector<sf::Sprite> enemies;
-    sf::Sprite enemyHitbox;
     std::vector<int> enemiesInt;
 
     std::vector<sf::Sprite> bullets;
@@ -29,8 +28,6 @@ public:
     void destroyShip();
     void enemyBulletIntersect();
     void spreadBullets(sf::Sprite);
-
-    void changeHitbox(sf::Sprite);
 
     //Render
     void renderShip(sf::RenderTarget&);
