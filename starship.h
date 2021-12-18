@@ -23,7 +23,7 @@ public:
     std::vector<sf::Sprite> bullets;
 
     //Functions
-    void windowValues(int, int);
+    void windowValues(sf::RenderWindow*);
     void spawnBullet();
     void destroyShip();
     void enemyBulletIntersect();
@@ -41,7 +41,7 @@ public:
 
     //Constructor/Destructor
     Starship();
-    Starship(int, int);
+    Starship(sf::RenderWindow*);
     ~Starship();
 
 private:

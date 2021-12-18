@@ -10,9 +10,9 @@ Starship::Starship()
 {
 }
 
-Starship::Starship(int width, int height) 
+Starship::Starship(sf::RenderWindow* window) 
 {
-    windowValues(width, height);
+    windowValues(window);
     //Init
     initVariables();
     initBullet(); 
@@ -159,7 +159,7 @@ void Starship::controlShip()
     }
 }
 
-void Starship::windowValues(int width, int height) 
+void Starship::windowValues(sf::RenderWindow* window) 
 {
     /*
 
@@ -167,8 +167,8 @@ void Starship::windowValues(int width, int height)
 
     */
 
-    Starship::videoMode.width = width;
-    Starship::videoMode.height = height;
+    videoMode.width = window->getSize().x;
+    videoMode.height = window->getSize().y;
 }
 
 void Starship::spawnBullet() 

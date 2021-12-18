@@ -8,12 +8,8 @@ void Game::initVariables()
     this->window = nullptr;
 }
 void Game::initWindow() 
-{
-
-    this->videoMode.width = 1920;
-    this->videoMode.height = 1080;
-    
-    this->window = new sf::RenderWindow(this->videoMode, "Window",sf::Style::Close | sf::Style::Fullscreen);
+{    
+    this->window = new sf::RenderWindow(sf::VideoMode(1920 ,1080), "Window",sf::Style::Close | sf::Style::Fullscreen);
 
     this->texture.loadFromFile("assets/graphics/background.png");
     background.setTexture(texture);
@@ -27,7 +23,7 @@ Game::Game()
     this->initVariables();
     this->initWindow();
 
-    starship = new Starship(videoMode.width, videoMode.height);
+    starship = new Starship(window);
     enemy = new Enemy(window);
     screens = new Screens(window);
 }
