@@ -31,10 +31,11 @@ Screens::~Screens()
 void Screens::initVariables()
 {
     isHeld = false;
-    startBool = false;
-    retryBool = false;
     isHeld2 = false;
-    reload = false;
+
+    startBool = true;
+    retryBool = false;
+    reloadBool = false;
 
     Hue = 0;
     increaseSpeed = 0.025f;
@@ -133,7 +134,6 @@ void Screens::pollEvent(sf::Event ev)
     //Enter Username
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !isHeld2 && username.size() > 0)
     {
-
         isHeld2 = true;
         username.erase(username.size() - 1);
 
@@ -153,8 +153,9 @@ void Screens::pollEvent(sf::Event ev)
     //Confirm Username
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
     {
-        startBool = false;
-        reload = true;
+        initVariables();
+        reloadBool = false;
+        retryBool = true;
     }
     
 
@@ -165,8 +166,10 @@ void Screens::updateScreens(bool end, int p)
 {
     //Init when ship is dead
     endBool = end;
+
     if(!endBool)
     {
+        reloadBool = false;
         retryBool = false;
     }
 
@@ -183,17 +186,16 @@ void Screens::updateScreens(bool end, int p)
             //When mouse is on startButton
             if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
+                startBool = false;
+                
                 username.erase();
-
-                reload = false;
-                startBool = true;
             }
 
             //When mouse is on retryButton
             if(retryButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
                 retryBool = true;
-            }
+            } 
         }
 
     } else isHeld = false;
@@ -229,22 +231,27 @@ void Screens::updateMousepos()
 //Render
 void Screens::renderScreens(sf::RenderTarget& target)
 {
-    if(!startBool){
-        //Start Screen
+
+    //Start Screen
+    if(startBool || reloadBool)
+    {
         target.draw(startScreen);
         target.draw(startButton);
         target.draw(startText);
+    }
+    
 
-    } else {
-        if(!endBool)
-        // While Game
+    // While Game
+    if(!startBool && !reloadBool && !endBool)
+    {
         target.draw(pointsText);
     }
 
-    if(endBool)
+    
+    //End Screen
+    if(endBool && !startBool)
     {
-        //End Screen
-        target.draw(endText);
+            target.draw(endText);
         target.draw(enterUsername);
         target.draw(retryButton);
         target.draw(retryText);

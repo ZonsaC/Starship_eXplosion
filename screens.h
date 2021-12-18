@@ -18,7 +18,7 @@ public:
     bool startBool;
     bool endBool;
     bool retryBool;
-    bool reload;
+    bool reloadBool;
 
     // Constructor / Destructor
     Screens();

@@ -16,20 +16,23 @@ public:
     bool destroyShipBool;
     unsigned points;
     sf::VideoMode videoMode;
+    std::vector<sf::Sprite> enemies;
+    std::vector<int> enemiesInt;
+    std::vector<sf::Sprite> bullets;
 
     //Functions
     void windowValues(int, int);
     void spawnBullet();
     void destroyShip();
-    void getPoints();
-    void spreadBullets();
+    void enemyBulletIntersect();
+    void spreadBullets(sf::Sprite);
 
     //Render
     void renderShip(sf::RenderTarget&);
     void renderUpgrades(sf::RenderTarget&);
 
     //Update
-    void updateShip(bool, bool, bool);
+    void updateShip(bool, bool, bool, std::vector<sf::Sprite>, std::vector<int>);
     void updateBullet();
     void updateUpgrades();
     void controlShip();
@@ -44,10 +47,10 @@ private:
     sf::Sprite ship;
     sf::Texture texture;
 
+
     //Bullets
     sf::Sprite bullet;
     sf::Texture bulletTexture;
-    std::vector<sf::Sprite> bullets;
     sf::Time time;
 
     //Upgrades

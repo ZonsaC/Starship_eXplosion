@@ -68,11 +68,12 @@ void Game::update()
 {
     //Event polling
     this->pollEvent();
+
     screens->updateScreens(starship->destroyShipBool, starship->points);
-    if (screens->startBool)
+    if (!screens->startBool)
     {
-        starship->updateShip(screens->retryBool, screens->startBool, screens->reload);
-        enemy->updateEnemies();
+        starship->updateShip(screens->retryBool, screens->startBool, screens->reloadBool, enemy->enemies, enemy->enemiesInt);
+        enemy->updateEnemies(screens->retryBool, starship->bullets, starship->enemies, starship->enemiesInt);
     }
 
 }
@@ -94,7 +95,7 @@ void Game::render()
     //Draw game objects
     this->window->draw(background);
 
-    if (screens->startBool)
+    if (!screens->startBool)
     {
     starship->renderShip(*window);
     enemy->renderEnemies(*window);

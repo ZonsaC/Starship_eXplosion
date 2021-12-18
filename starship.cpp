@@ -33,6 +33,7 @@ void Starship::initVariables()
     */
 
     // Dont change
+    destroyShipBool = false;
     upgradeAutofire = false;
     isUpgradeSet = false;
     spawnBulletBool = false;
@@ -193,78 +194,62 @@ void Starship::destroyShip()
 
     */
 
-    if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0){
-        if(curDestroyTexture < texture.getSize().x * 4)
-        {
-            curDestroyTexture += destroyTextureSpeed;
-            if(static_cast<int>(curDestroyTexture) % 65 == 0)
+    for(int i = 0; i < enemies.size(); i++)
+        if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0 || ship.getGlobalBounds().intersects(enemies[i].getGlobalBounds())){
+            if(curDestroyTexture < texture.getSize().x * 4)
             {
-                this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(curDestroyTexture ,0 , 65, 75));
-                ship.setTexture(this->texture);
+                curDestroyTexture += destroyTextureSpeed;
+                if(static_cast<int>(curDestroyTexture) % 65 == 0)
+                {
+                    this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(curDestroyTexture ,0 , 65, 75));
+                    ship.setTexture(this->texture);
+                }
             }
+
+            if(static_cast<int>(curDestroyTexture) == 260)
+                destroyShipBool = true;
         }
-        destroyShipBool = true;
-    }
 }
 
-void Starship::getPoints() 
-{
-    /*
-
-        -- TEMPORARY --
-
-        Inputs
-        - On Press [P] 5
-        - On Press [O] Spread
-
-    */
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::P) && !isHold)
-    {
-        isHold = true;
-        points += 5;
-        // std::cout << points << "\n";
-
-    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::P)) isHold = false;
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::O) && !isHold2)
-    {
-        isHold2 = true;
-        if(bullets.size() > 0)
-            spreadBullets();
-
-    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::O)) isHold2 = false;
-
-}
-
-void Starship::spreadBullets() 
+void Starship::spreadBullets(sf::Sprite b) 
 {
     /*
 
         Spreads Bullets
-        Erase first Bullet
         Adds Bullets to vector
 
     */
 
+    tempRotation = 360 / upgradeSpread;
     for(int i = 0; i < upgradeSpread; i++)
     {
-        rotationSpread = rotationSpread + (360 / upgradeSpread);
-
-        bullet.setPosition(bullets[0].getPosition());
-        bullet.setRotation(rotationSpread);
+        tempRotation += 360 / upgradeSpread;
+        bullet.setRotation(tempRotation);
+        bullet.setPosition(b.getPosition());
 
         bullets.push_back(bullet);
     }
-
-    bullets.erase(bullets.begin());
-    rotationSpread = 0;
 }
 
+void Starship::enemyBulletIntersect()
+{
+    for(int i = 0; i < bullets.size(); i++)
+        for(int j = 0; j < enemies.size(); j++)
+            if(bullets[i].getGlobalBounds().intersects(enemies[j].getGlobalBounds()))
+            {
+                points++;
+                enemies.erase(enemies.begin() + j);
+                enemiesInt.erase(enemiesInt.begin() + j);
 
+                if(upgradeSpread > 0)
+                    spreadBullets(bullets[i]);
+
+                bullets.erase(bullets.begin() + i);
+            }
+}
 //Update Stuff
 
-void Starship::updateShip(bool retry, bool startBool, bool reload)
+void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp)
 {
     /*
 
@@ -272,21 +257,16 @@ void Starship::updateShip(bool retry, bool startBool, bool reload)
 
     */
 
-    if(reload)
+    enemies = enemiesFromCpp;
+    enemiesInt = enemiesIntfromCpp;
+
+    enemyBulletIntersect();
+
+    if(retry || reload)
     {
         initVariables();
         initBullet(); 
         initShip();
-        destroyShipBool = false;
-    }
-
-    if(retry)
-    {
-        initVariables();
-        initBullet(); 
-        initShip();
-
-        destroyShipBool = false;
     }
 
     if(!destroyShipBool)
@@ -295,7 +275,6 @@ void Starship::updateShip(bool retry, bool startBool, bool reload)
         updateBullet();
 
         if(startBool){
-            getPoints();
             updateUpgrades();
         }
 

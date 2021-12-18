@@ -15,8 +15,7 @@ class Enemy
 private:
     sf::Texture texture;
     sf::Sprite enemy;
-    std::vector<sf::Sprite> enemies;
-    std::vector<int> enemiesInt;
+    
 
     int maxEnemy;
 
@@ -40,12 +39,17 @@ private:
 
 
 public:
+    std::vector<sf::Sprite> enemies;
+    std::vector<int> enemiesInt;
+    std::vector<sf::Sprite> bullets;
+
     sf::VideoMode videoMode;
+
     Enemy();
     Enemy(sf::RenderWindow*);
     ~Enemy();
     
-    void updateEnemies();
+    void updateEnemies(bool ,std::vector<sf::Sprite>, std::vector<sf::Sprite>, std::vector<int>);
     void renderEnemies(sf::RenderTarget& target);
 
 };
