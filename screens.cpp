@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <sstream>
+#include <fstream>
 
 
 // Constructor / Destructor
@@ -152,14 +153,29 @@ void Screens::pollEvent(sf::Event ev)
 
     //Confirm Username
     if(endBool)
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !isHeld3)
         {
+            isHeld3 = true;
+            std::cout << "awef" << "\n";
+            StoreInFile();
+
             initVariables();
-            reloadBool = false;
+            reloadBool = false; 
             retryBool = true;
         }
-    
 
+        if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) isHeld3 = false;
+    }
+        
+}
+
+void Screens::StoreInFile()
+{
+    std::fstream f;
+    f.open(filename, std::ios::app);
+    f << points << "            " << username << std::endl;
+    f.close();
 }
 
 //Update
@@ -167,6 +183,7 @@ void Screens::updateScreens(bool end, int p)
 {
     //Init when ship is dead
     endBool = end;
+    points = p;
 
     if(!endBool)
     {
@@ -203,7 +220,7 @@ void Screens::updateScreens(bool end, int p)
 
 
     std::stringstream ss;
-    ss << "Points: " << p;
+    ss << "Points: " << points;
     pointsText.setString(ss.str());
 
 }
@@ -252,7 +269,7 @@ void Screens::renderScreens(sf::RenderTarget& target)
     //End Screen
     if(endBool && !startBool)
     {
-            target.draw(endText);
+        target.draw(endText);
         target.draw(enterUsername);
         target.draw(retryButton);
         target.draw(retryText);

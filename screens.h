@@ -8,12 +8,14 @@
 #include <SFML/Audio.hpp>
 
 #include <iostream>
+#include <fstream>
 
 
 class Screens
 {
 public:
     std::string username;
+    std::string filename = "Leaderboard.txt";
     
     bool startBool;
     bool endBool;
@@ -27,6 +29,8 @@ public:
 
     //Functions
     void initValues(sf::RenderWindow*);
+    void StoreInFile();
+
 
     //Poll Event
     void pollEvent(sf::Event);
@@ -59,6 +63,8 @@ private:
     bool isHeld;
 
     bool isHeld2;
+
+    bool isHeld3;
     
 
     sf::Texture t_startScreen;
