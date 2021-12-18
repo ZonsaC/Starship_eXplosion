@@ -78,6 +78,7 @@ void Starship::initShip()
     ship.setTexture(this->texture);
 
     //Change Origin
+    ship.setScale(1, 1);
     ship.setOrigin(ship.getLocalBounds().width / 2, ship.getLocalBounds().height / 2);
     ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
     ship.setRotation(0.f);
@@ -123,7 +124,7 @@ void Starship::controlShip()
             speedCur += acceleration;
 
         ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
-    }    
+    }
 
     if(attack >= attackSpeed / upgradeAttackspeed)
     {
@@ -145,11 +146,10 @@ void Starship::controlShip()
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
     
     //Breaking
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        tempRotation = ship.getRotation();
-
     if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
+        tempRotation = ship.getRotation();
+
         if(speedCur > 0)
             speedCur -= acceleration;
         if(speedCur < 0)
