@@ -184,6 +184,17 @@ void Starship::spawnBullet()
     bullets.push_back(bullet);
 }
 
+void Starship::changeHitbox(sf::Sprite e)
+{
+    enemyHitbox = e;
+
+    enemyHitbox.setRotation(0);
+    enemyHitbox.scale(0.8, 0.8);
+    enemyHitbox.setOrigin(enemyHitbox.getLocalBounds().left + enemyHitbox.getLocalBounds().width / 2,
+                          enemyHitbox.getLocalBounds().top + enemyHitbox.getLocalBounds().height / 2);
+    enemyHitbox.setPosition(e.getPosition());
+}
+
 void Starship::destroyShip()
 {
     /*
@@ -195,7 +206,15 @@ void Starship::destroyShip()
     */
 
     for(int i = 0; i < enemies.size(); i++)
-        if(ship.getPosition().x > videoMode.width || ship.getPosition().y > videoMode.height || ship.getPosition().x <= 0 || ship.getPosition().y <= 0 || ship.getGlobalBounds().intersects(enemies[i].getGlobalBounds())){
+    {
+        changeHitbox(enemies[i]);
+
+        if(ship.getPosition().x > videoMode.width || 
+           ship.getPosition().y > videoMode.height || 
+           ship.getPosition().x <= 0 || 
+           ship.getPosition().y <= 0 || 
+           ship.getGlobalBounds().intersects(enemyHitbox.getGlobalBounds()))
+           {
             if(curDestroyTexture < texture.getSize().x * 4)
             {
                 curDestroyTexture += destroyTextureSpeed;
@@ -206,8 +225,9 @@ void Starship::destroyShip()
                 }
             }
 
-            if(static_cast<int>(curDestroyTexture) == 260)
-                destroyShipBool = true;
+            destroyShipBool = true;
+    }
+
         }
 }
 
@@ -235,7 +255,10 @@ void Starship::enemyBulletIntersect()
 {
     for(int i = 0; i < bullets.size(); i++)
         for(int j = 0; j < enemies.size(); j++)
-            if(bullets[i].getGlobalBounds().intersects(enemies[j].getGlobalBounds()))
+        {
+            changeHitbox(enemies[j]);
+
+            if(bullets[i].getGlobalBounds().intersects(enemyHitbox.getGlobalBounds()))
             {
                 points++;
                 enemies.erase(enemies.begin() + j);
@@ -246,6 +269,8 @@ void Starship::enemyBulletIntersect()
 
                 bullets.erase(bullets.begin() + i);
             }
+        }
+
 }
 //Update Stuff
 
@@ -273,11 +298,7 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
     {
         controlShip();
         updateBullet();
-
-        if(startBool){
-            updateUpgrades();
-        }
-
+        updateUpgrades();
     } 
 
     destroyShip();
@@ -454,6 +475,7 @@ void Starship::renderShip(sf::RenderTarget& target)
 
     //Render Ship
     target.draw(ship);
+
     if(!destroyShipBool)
         renderUpgrades(target);
 }

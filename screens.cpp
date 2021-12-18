@@ -151,12 +151,13 @@ void Screens::pollEvent(sf::Event ev)
     enterUsername.setString("Enter Username: \n" + username);
 
     //Confirm Username
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-    {
-        initVariables();
-        reloadBool = false;
-        retryBool = true;
-    }
+    if(endBool)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+        {
+            initVariables();
+            reloadBool = false;
+            retryBool = true;
+        }
     
 
 }
