@@ -253,7 +253,6 @@ void Starship::enemyBulletIntersect()
                     enemies.erase(enemies.begin() + j);
                     enemiesInt.erase(enemiesInt.begin() + j);
                     enemiesHealth.erase(enemiesHealth.begin() + j);
-                    
                 }
 
                 if(upgradeSpread > 0)

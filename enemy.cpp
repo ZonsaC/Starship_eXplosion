@@ -87,6 +87,7 @@ void Enemy::spawnEnemy()
     if(points < 20)
     {
         enemiesHealth.push_back(1);
+        enemy.setColor(sf::Color(255, 255, 255));
     } else
     if(points < 100)
     {
