@@ -15,6 +15,9 @@ class Enemy
 private:
     sf::Texture texture;
     sf::Sprite enemy;
+
+    sf::Clock clock;
+    float ElapsedTime;
     
 
     int maxEnemy;

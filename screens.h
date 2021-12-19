@@ -52,6 +52,9 @@ private:
     sf::VideoMode videoMode;
     sf::RenderWindow* window;
 
+    sf::Clock clock;
+    float ElapsedTime;
+
 
     //Startscreen
     sf::Text startText;

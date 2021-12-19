@@ -13,7 +13,7 @@ void Game::initWindow()
 
     this->texture.loadFromFile("assets/graphics/background.png");
     background.setTexture(texture);
-    //this->window->setFramerateLimit(140);
+    this->window->setFramerateLimit(120);
 }
 
 

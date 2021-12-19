@@ -15,7 +15,10 @@ class Starship
 public:
     bool destroyShipBool;
     unsigned points;
+
     sf::VideoMode videoMode;
+    sf::Clock clock;
+    float ElapsedTime;
 
     std::vector<sf::Sprite> enemies;
     std::vector<int> enemiesInt;

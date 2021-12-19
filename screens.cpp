@@ -185,6 +185,9 @@ void Screens::updateScreens(bool end, int p)
     endBool = end;
     points = p;
 
+    ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
+    clock.restart();
+
     if(!endBool)
     {
         reloadBool = false;
@@ -231,7 +234,7 @@ void Screens::updateEndtext()
     if(Hue < 255 && endBool)
         if(curIncSpeed < 255)
         {
-            curIncSpeed += increaseSpeed;
+            curIncSpeed += increaseSpeed * ElapsedTime;
             Hue = round(curIncSpeed);
             endText.setFillColor(sf::Color(255, 255, 255, Hue));
             retryButton.setColor(sf::Color(255, 255, 255, Hue));

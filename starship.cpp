@@ -51,6 +51,7 @@ void Starship::initVariables()
     attack = 0.f;
     curDestroyTexture = 0.f;
     rotationSpread = 0.f;
+    ElapsedTime = 0.f;
 
     upgradeAttackspeed = 1.f;
     upgradeMovementspeed = 1.f;
@@ -110,23 +111,24 @@ void Starship::controlShip()
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        ship.rotate(-1 * 0.06);
+        ship.rotate(-1 * 0.05 * ElapsedTime);
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        ship.rotate(1 * 0.06);
+        ship.rotate(1 * 0.05 * ElapsedTime);
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         if(speedCur < speedMax * upgradeMovementspeed)
-            speedCur += acceleration;
+            speedCur += acceleration * ElapsedTime;
 
-        ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur);
+        ship.move(sin((ship.getRotation() / 180) * 3.14) * speedCur * ElapsedTime, -1 * cos((ship.getRotation() / 180) * 3.14) * speedCur * ElapsedTime);
+        tempRotation = ship.getRotation();
     }
 
-    if(attack >= attackSpeed / upgradeAttackspeed)
+    if(attack * ElapsedTime >= attackSpeed / upgradeAttackspeed)
     {
         attackV = true;
     } else 
@@ -148,14 +150,12 @@ void Starship::controlShip()
     //Breaking
     if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        tempRotation = ship.getRotation();
-
         if(speedCur > 0)
-            speedCur -= acceleration;
+            speedCur -= acceleration * ElapsedTime * 0.5;
         if(speedCur < 0)
-            speedCur += acceleration;
+            speedCur = 0;
 
-        ship.move(sin((tempRotation / 180) * 3.14) * speedCur, -1 * cos((tempRotation / 180) * 3.14) * speedCur);
+        ship.move(sin((tempRotation / 180) * 3.14) * speedCur * ElapsedTime, -1 * cos((tempRotation / 180) * 3.14) * speedCur * ElapsedTime);
     }
 }
 
@@ -204,18 +204,17 @@ void Starship::destroyShip()
            {
             if(curDestroyTexture < texture.getSize().x * 4)
             {
-                curDestroyTexture += destroyTextureSpeed;
+                curDestroyTexture += destroyTextureSpeed * 10;
                 if(static_cast<int>(curDestroyTexture) % 65 == 0)
                 {
                     this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(curDestroyTexture ,0 , 65, 75));
                     ship.setTexture(this->texture);
                 }
             }
-
-            destroyShipBool = true;
-    }
-
+        destroyShipBool = true;
         }
+
+    }
 }
 
 void Starship::spreadBullets(sf::Sprite b) 
@@ -227,7 +226,7 @@ void Starship::spreadBullets(sf::Sprite b)
 
     */
 
-    tempRotation = 360 / upgradeSpread;
+    tempRotation = rand() % 360;
     for(int i = 0; i < upgradeSpread; i++)
     {
         tempRotation += 360 / upgradeSpread;
@@ -267,6 +266,9 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
 
     */
 
+    ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
+    clock.restart();
+
     enemies = enemiesFromCpp;
     enemiesInt = enemiesIntfromCpp;
 
@@ -305,7 +307,7 @@ void Starship::updateBullet()
         bullets[i].scale(1 * upgradeBulletScale, 1 * upgradeBulletScale);
         bullets[i].setOrigin(bullets[i].getLocalBounds().width / 2, bullets[i].getLocalBounds().height / 2);
 
-        bullets[i].move(sin((bullets[i].getRotation() / 180) * 3.14) / 5, -1 * cos((bullets[i].getRotation() / 180) * 3.14) / 5);
+        bullets[i].move(sin((bullets[i].getRotation() / 180) * 3.14) / 5 * ElapsedTime, -1 * cos((bullets[i].getRotation() / 180) * 3.14) / 5 * ElapsedTime);
 
         //Destroy Bullets outside of screen
         if(bullets[i].getPosition().x > videoMode.width + 30 || bullets[i].getPosition().y > videoMode.height + 30 || bullets[i].getPosition().x <= -30 || bullets[i].getPosition().y <= -30){
