@@ -244,9 +244,18 @@ void Starship::enemyBulletIntersect()
         {
             if(bullets[i].getGlobalBounds().intersects(enemies[j].getGlobalBounds()))
             {
-                points++;
-                enemies.erase(enemies.begin() + j);
-                enemiesInt.erase(enemiesInt.begin() + j);
+                enemiesHealth[j] -= 1;
+                
+                if(enemiesHealth[j] == 0)
+                {
+                    points++;
+                    enemies.erase(enemies.begin() + j);
+                    enemiesInt.erase(enemiesInt.begin() + j);
+                    enemiesHealth.erase(enemiesHealth.begin() + j);
+                }
+
+
+                
 
                 if(upgradeSpread > 0)
                     spreadBullets(bullets[i]);
@@ -258,7 +267,7 @@ void Starship::enemyBulletIntersect()
 }
 //Update Stuff
 
-void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp)
+void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp, std::vector<int> eH)
 {
     /*
 
@@ -266,9 +275,14 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
 
     */
 
+    for(int i = 0; i < eH.size(); i++)
+        std::cout << "Health: " << eH[i] << "\n";
+    std::cout << "\n";
+
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
+    enemiesHealth = eH;
     enemies = enemiesFromCpp;
     enemiesInt = enemiesIntfromCpp;
 

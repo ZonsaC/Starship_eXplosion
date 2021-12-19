@@ -7,7 +7,7 @@ Todo:
 
 - Endscreen                                     -- Done
 
-- Score
+- Score                                         -- Done
 
 - Leaderboard
 
@@ -15,7 +15,6 @@ Todo:
     - Spawning Upgrades
         - Faster Attackspeed                    -- Done
         - Autoshoot                             -- Done
-        - Spread                                
         - Faster Movement                       -- Done
         - Shield
         - Extra Life
@@ -30,8 +29,8 @@ Todo:
     - Collision mit Wand        -- Done
 
 - Enemies
-    - Spawning
-    - Explosion
+    - Spawning                  -- Done
+    - Explosion                 -- Done
         - Abschuss
         - Collision
     - Partikel

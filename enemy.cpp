@@ -59,7 +59,7 @@ void Enemy::spawnEnemy()
 
     //Spawns Enemy
     switch (enemySpawnPos)
-        {
+    {
         case 0:
             //oben
                 enemy.setPosition(rand() % static_cast<int>(videoMode.width + enemy.getGlobalBounds().width * 2) + (-1 * enemy.getGlobalBounds().width), (-1 * enemy.getGlobalBounds().height / 2));
@@ -80,8 +80,33 @@ void Enemy::spawnEnemy()
                 enemy.setPosition((-1 * enemy.getGlobalBounds().width / 2), rand() % static_cast<int>(videoMode.height + enemy.getGlobalBounds().height * 2) + (-1 * enemy.getGlobalBounds().height));
                 enemy.setRotation(rand() % 40 + 70);
             break;
-        }
+    }
     
+
+    if(points < 20)
+    {
+        enemiesHealth.push_back(1);
+    } else
+    if(points < 100)
+    {
+        enemiesHealth.push_back(2);
+        enemy.setColor(sf::Color(190, 190, 255));
+    } else
+    if(points < 200)
+    {
+        enemiesHealth.push_back(3);
+        enemy.setColor(sf::Color(160, 140, 255));
+    } else
+    if(points < 300)
+    {
+        enemiesHealth.push_back(5);
+        enemy.setColor(sf::Color(160, 140, 150));
+    }else
+    {
+        enemiesHealth.push_back(10);
+        enemy.setColor(sf::Color(160, 70, 110));
+    }
+
     enemiesInt.push_back(enemySpawnPos);
     enemies.push_back(enemy);
 }
@@ -129,14 +154,16 @@ void Enemy::destroyEnemies()
 }
 
 
-void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> b, std::vector<sf::Sprite> e, std::vector<int> eI) 
+void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> b, std::vector<sf::Sprite> e, std::vector<int> eI, std::vector<int> eH, int p) 
 {
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
+    points = p;
     bullets = b;
     enemies = e;
     enemiesInt = eI;
+    enemiesHealth = eH;
 
     if(retry)
     {

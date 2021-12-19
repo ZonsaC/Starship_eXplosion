@@ -19,7 +19,7 @@ private:
     sf::Clock clock;
     float ElapsedTime;
     
-
+    int points;
     int maxEnemy;
 
     int enemySpawnTimer;
@@ -43,6 +43,7 @@ private:
 
 public:
     std::vector<sf::Sprite> enemies;
+    std::vector<int> enemiesHealth;
     std::vector<int> enemiesInt;
     std::vector<sf::Sprite> bullets;
 
@@ -52,7 +53,7 @@ public:
     Enemy(sf::RenderWindow*);
     ~Enemy();
     
-    void updateEnemies(bool ,std::vector<sf::Sprite>, std::vector<sf::Sprite>, std::vector<int>);
+    void updateEnemies(bool , std::vector<sf::Sprite>, std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, int);
     void renderEnemies(sf::RenderTarget& target);
 
 };

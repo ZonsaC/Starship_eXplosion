@@ -68,8 +68,8 @@ void Game::update()
     screens->updateScreens(starship->destroyShipBool, starship->points);
     if (!screens->startBool)
     {
-        starship->updateShip(screens->retryBool, screens->startBool, screens->reloadBool, enemy->enemies, enemy->enemiesInt);
-        enemy->updateEnemies(screens->retryBool, starship->bullets, starship->enemies, starship->enemiesInt);
+        enemy->updateEnemies(screens->retryBool, starship->bullets, starship->enemies, starship->enemiesInt, starship->enemiesHealth, starship->points);
+        starship->updateShip(screens->retryBool, screens->startBool, screens->reloadBool, enemy->enemies, enemy->enemiesInt, enemy->enemiesHealth);
     }
 
 }
