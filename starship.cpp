@@ -408,12 +408,11 @@ void Starship::updateUpgrades()
                 break;
 
                 case 4:
-                    upgradeBulletScale += 0.000075;
+                    upgradeBulletScale += 0.005f;
 
-                    if(upgradeBulletScale > 1.00052)
+                    if(upgradeBulletScale == 1.025f)
                     {
                         SperrUpgrade.push_back(4);
-                        upgradeBulletScale = 1.00052;
                     }
                         
                 break;
@@ -423,10 +422,10 @@ void Starship::updateUpgrades()
                         upgradeSpread += 1;
                     while(!(360 % upgradeSpread == 0));
 
-                    if(upgradeSpread > 360)
+                    if(upgradeSpread > 36)
                     {
                         SperrUpgrade.push_back(5);
-                        upgradeSpread = 360;
+                        upgradeSpread = 36;
                     }
                         
                 break;

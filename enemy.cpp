@@ -90,7 +90,7 @@ void Enemy::moveEnemies()
 {
     for(int i = 0; i < enemies.size(); i++)
     {
-        enemies[i].move(sin((enemies[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime * 0.008, -1 * cos((enemies[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime * 0.008);
+        enemies[i].move(sin((enemies[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime, -1 * cos((enemies[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime);
     }
 }
 
@@ -131,7 +131,7 @@ void Enemy::destroyEnemies()
 
 void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> b, std::vector<sf::Sprite> e, std::vector<int> eI) 
 {
-    ElapsedTime = clock.getElapsedTime().asMicroseconds();
+    ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
     bullets = b;
@@ -147,7 +147,7 @@ void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> b, std::vector<sf:
 
     if (enemies.size() < maxEnemy)
     {
-        if (enemySpawnTimer * ElapsedTime * 0.008 >= enemySpawnTimerMax)
+        if (enemySpawnTimer * ElapsedTime >= enemySpawnTimerMax)
         {
             spawnEnemy();
             enemySpawnTimer = 0;
