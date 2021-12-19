@@ -240,7 +240,7 @@ void Starship::spreadBullets(sf::Sprite b)
 
     */
 
-    tempRotation = 360 / upgradeSpread;
+    tempRotation = rand() % 360;
     for(int i = 0; i < upgradeSpread; i++)
     {
         tempRotation += 360 / upgradeSpread;
@@ -264,6 +264,9 @@ void Starship::enemyBulletIntersect()
             {
                 enemiesHealth[j] -= 1;
 
+                if(upgradeSpread > 0 && enemiesHealth[j] == 0.f)
+                    spreadBullets(bullets[i]);
+
                 if(enemiesHealth[j] == 0.f)
                 {
                     points++;
@@ -273,9 +276,6 @@ void Starship::enemyBulletIntersect()
                     enemiesHealth.erase(enemiesHealth.begin() + j);
                     Hitboxes.erase(Hitboxes.begin() + j);
                 }
-
-                if(upgradeSpread > 0)
-                    spreadBullets(bullets[i]);
 
                 bullets.erase(bullets.begin() + i);
                 bulletHitboxes.erase(bulletHitboxes.begin() + i);
@@ -455,9 +455,9 @@ void Starship::updateUpgrades()
                 break;
 
                 case 4:
-                    upgradeBulletScale += 0.005f;
+                    upgradeBulletScale += 0.0025f;
 
-                    if(upgradeBulletScale == 1.025f)
+                    if(upgradeBulletScale == 1.020f)
                     {
                         SperrUpgrade.push_back(4);
                     }

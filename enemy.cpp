@@ -86,7 +86,7 @@ void Enemy::spawnEnemy()
     }
     
 
-    if(points < 20)
+    if(points < 50)
     {
         enemiesHealth.push_back(1);
         enemy.setColor(sf::Color(255, 255, 255));
@@ -96,12 +96,12 @@ void Enemy::spawnEnemy()
         enemiesHealth.push_back(2);
         enemy.setColor(sf::Color(190, 190, 255));
     } else
-    if(points < 200)
+    if(points < 150)
     {
         enemiesHealth.push_back(3);
         enemy.setColor(sf::Color(160, 140, 255));
     } else
-    if(points < 300)
+    if(points < 200)
     {
         enemiesHealth.push_back(5);
         enemy.setColor(sf::Color(160, 140, 150));
