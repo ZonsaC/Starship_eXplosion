@@ -57,7 +57,7 @@ void Starship::initVariables()
     upgradeMovementspeed = 1.f;
     upgradeBulletScale = 1.f;
     upgradeSmallerShip = 1.f;
-    upgradeSpread = 36;
+    upgradeSpread = 0;
     upgrades.clear();
     upgradesInt.clear();
     SperrUpgrade.clear();
@@ -240,7 +240,7 @@ void Starship::spreadBullets(sf::Sprite b)
 
     */
 
-    tempRotation = rand() % 360;
+    tempRotation = 360 / upgradeSpread;
     for(int i = 0; i < upgradeSpread; i++)
     {
         tempRotation += 360 / upgradeSpread;
