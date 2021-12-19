@@ -17,6 +17,7 @@ Starship::Starship(sf::RenderWindow* window)
     initVariables();
     initBullet(); 
     initShip();
+    initShield();
 }
 
 Starship::~Starship() 
@@ -41,8 +42,10 @@ void Starship::initVariables()
     isHold = false;
     attackV = false;
     ValOk = false;
+    shipDestroyedAnimation = false;
 
     bulletSpread = false;
+    shieldActive = false;
 
     upgradeChoice = 0;
     points = 0;
@@ -104,6 +107,12 @@ void Starship::initBullet()
     bulletHitbox.setOutlineColor(sf::Color::Magenta);
 }
 
+void Starship::initShield()
+{
+    shieldTexture.loadFromFile("assets/graphics/shield.png");
+    upgradeShield.setTexture(shieldTexture);
+    upgradeShield.setOrigin(upgradeShield.getGlobalBounds().width / 2, upgradeShield.getGlobalBounds().height / 2);
+}
 
 //Functions
 
@@ -152,6 +161,7 @@ void Starship::controlShip()
 
         if(attackV){
             attack = 0;
+            points += 5;
             spawnBullet();
         }
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
@@ -214,19 +224,36 @@ void Starship::destroyShip()
            shipHitbox.getPosition().y > videoMode.height || 
            shipHitbox.getPosition().x <= 0 || 
            shipHitbox.getPosition().y <= 0 || 
-           shipHitbox.getGlobalBounds().intersects(Hitboxes[i].getGlobalBounds()))
-           {
-            if(curDestroyTexture < texture.getSize().x * 4)
+           shipHitbox.getGlobalBounds().intersects(Hitboxes[i].getGlobalBounds()) ||
+           shipDestroyedAnimation)
+            if(!shieldActive)
             {
-                curDestroyTexture += destroyTextureSpeed * 10;
-                if(static_cast<int>(curDestroyTexture) % 65 == 0)
+                shipDestroyedAnimation = true;
+                
+                if(curDestroyTexture < texture.getSize().x * 4)
                 {
-                    this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(curDestroyTexture ,0 , 65, 75));
-                    ship.setTexture(this->texture);
+                    curDestroyTexture += destroyTextureSpeed * 10;
+                    if(static_cast<int>(curDestroyTexture) % 65 == 0)
+                    {
+                        this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(curDestroyTexture ,0 , 65, 75));
+                        ship.setTexture(this->texture);
+                    }
+                }
+            destroyShipBool = true;
+            }else {
+                enemies.erase(enemies.begin() + i);
+                enemiesInt.erase(enemiesInt.begin() + i);
+                enemiesHealth.erase(enemiesHealth.begin() + i);
+                Hitboxes.erase(Hitboxes.begin() + i);
+                shieldActive = false;
+                for(int j = 0; j < SperrUpgrade.size(); j++)
+                {
+                    if(SperrUpgrade[j] == 7)
+                    {
+                        SperrUpgrade.erase(SperrUpgrade.begin() + j);
+                    }
                 }
             }
-        destroyShipBool = true;
-        }
 
     }
 }
@@ -320,6 +347,7 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
         initVariables();
         initBullet(); 
         initShip();
+        initShield();
     }
 
     if(!destroyShipBool)
@@ -372,6 +400,9 @@ void Starship::updateUpgrades()
 
     */
 
+    if(shieldActive)
+        upgradeShield.setPosition(ship.getPosition());
+
     //Choose Upgrade
     if(points % 10 != 0)
     {
@@ -384,7 +415,7 @@ void Starship::updateUpgrades()
         ValOk = false;
         while (!ValOk)
         {
-            upgradeChoice = rand() % 6 + 1;
+            upgradeChoice = rand() % 7 + 1;
             if(!(std::find(SperrUpgrade.begin(), SperrUpgrade.end(), upgradeChoice) != SperrUpgrade.end()) || upgradeChoice == 0) ValOk = true;
         }
             
@@ -419,6 +450,11 @@ void Starship::updateUpgrades()
             case 6:
                 upgradeTextureSmall.loadFromFile("assets/graphics/upgradeSmallShip.png");
                 upgrade.setTexture(upgradeTextureSmall);
+            break;
+
+            case 7:
+                upgradeTextureShield.loadFromFile("assets/graphics/upgradeShield.png");
+                upgrade.setTexture(upgradeTextureShield);
             break;
         }
 
@@ -488,6 +524,11 @@ void Starship::updateUpgrades()
                         upgradeSmallerShip = 0.85;
                     }
                 break;
+
+                case 7:
+                    shieldActive = true;
+                    SperrUpgrade.push_back(7);
+                break;
             }
 
             upgrades.erase(upgrades.begin() + i);
@@ -519,4 +560,7 @@ void Starship::renderUpgrades(sf::RenderTarget& target)
     {
         target.draw(e);
     }
+
+    if(shieldActive)
+        target.draw(upgradeShield);
 }

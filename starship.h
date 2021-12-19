@@ -72,6 +72,10 @@ private:
     sf::Texture upgradeTextureBulletScale;
     sf::Texture upgradeTextureSpread;
     sf::Texture upgradeTextureSmall;
+    sf::Texture upgradeTextureShield;
+
+    sf::Sprite upgradeShield;
+    sf::Texture shieldTexture;
 
     std::vector<sf::Sprite> upgrades;
     std::vector<int> upgradesInt;
@@ -81,6 +85,7 @@ private:
     //Variables
     bool isHold;
     bool isUpgradeSet;
+    bool shipDestroyedAnimation;
     float destroyTextureSpeed;
     float curDestroyTexture;
     bool attackV;
@@ -100,6 +105,7 @@ private:
     int upgradeChoice;
     float rotationSpread;
     bool bulletSpread;
+    bool shieldActive;
 
     //Variables that change Game behavior
     float upgradeAttackspeed;
@@ -113,5 +119,6 @@ private:
     void initVariables();
     void initShip();
     void initBullet();
+    void initShield();
 };
 #endif
