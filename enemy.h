@@ -45,7 +45,6 @@ public:
     std::vector<sf::Sprite> enemies;
     std::vector<int> enemiesHealth;
     std::vector<int> enemiesInt;
-    std::vector<sf::Sprite> bullets;
 
     sf::VideoMode videoMode;
 
@@ -53,7 +52,7 @@ public:
     Enemy(sf::RenderWindow*);
     ~Enemy();
     
-    void updateEnemies(bool , std::vector<sf::Sprite>, std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, int);
+    void updateEnemies(bool , std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, int);
     void renderEnemies(sf::RenderTarget& target);
 
 };

@@ -28,6 +28,7 @@ void Enemy::initVariables()
 
     randomEnemyScale = 0;
     enemySpawnPos = 0;
+    enemiesHealth.clear();
     enemiesInt.clear();
     enemies.clear();
 }
@@ -129,24 +130,28 @@ void Enemy::destroyEnemies()
             if(enemies[i].getPosition().y > videoMode.height + enemies[i].getGlobalBounds().height){
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
+                enemiesHealth.erase(enemiesHealth.begin() + i);
             }
             break;
         case 1:
             if(enemies[i].getPosition().x < -1 * enemies[i].getGlobalBounds().width){
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
+                enemiesHealth.erase(enemiesHealth.begin() + i);
             }
             break;
         case 2:
             if(enemies[i].getPosition().y < -1 * enemies[i].getGlobalBounds().height){
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
+                enemiesHealth.erase(enemiesHealth.begin() + i);
             }
             break;
         case 3:
             if(enemies[i].getPosition().x > videoMode.width + enemies[i].getGlobalBounds().width){
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
+                enemiesHealth.erase(enemiesHealth.begin() + i);
             }
             break;
         }
@@ -154,13 +159,12 @@ void Enemy::destroyEnemies()
 }
 
 
-void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> b, std::vector<sf::Sprite> e, std::vector<int> eI, std::vector<int> eH, int p) 
+void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int> eI, std::vector<int> eH, int p) 
 {
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
     points = p;
-    bullets = b;
     enemies = e;
     enemiesInt = eI;
     enemiesHealth = eH;

@@ -245,17 +245,16 @@ void Starship::enemyBulletIntersect()
             if(bullets[i].getGlobalBounds().intersects(enemies[j].getGlobalBounds()))
             {
                 enemiesHealth[j] -= 1;
-                
-                if(enemiesHealth[j] == 0)
+
+                if(enemiesHealth[j] == 0.f)
                 {
                     points++;
+
                     enemies.erase(enemies.begin() + j);
                     enemiesInt.erase(enemiesInt.begin() + j);
                     enemiesHealth.erase(enemiesHealth.begin() + j);
+                    
                 }
-
-
-                
 
                 if(upgradeSpread > 0)
                     spreadBullets(bullets[i]);
@@ -274,17 +273,13 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
         Inits when restart
 
     */
-
-    for(int i = 0; i < eH.size(); i++)
-        std::cout << "Health: " << eH[i] << "\n";
-    std::cout << "\n";
-
-    ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
-    clock.restart();
-
     enemiesHealth = eH;
     enemies = enemiesFromCpp;
     enemiesInt = enemiesIntfromCpp;
+
+
+    ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
+    clock.restart();
 
     enemyBulletIntersect();
 
