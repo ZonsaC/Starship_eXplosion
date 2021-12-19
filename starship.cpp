@@ -57,10 +57,11 @@ void Starship::initVariables()
     upgradeMovementspeed = 1.f;
     upgradeBulletScale = 1.f;
     upgradeSmallerShip = 1.f;
-    upgradeSpread = 0;
+    upgradeSpread = 36;
     upgrades.clear();
     upgradesInt.clear();
     SperrUpgrade.clear();
+    bulletHitboxes.clear();
 
     //Parameters
     acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
@@ -78,11 +79,14 @@ void Starship::initShip()
     this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(0 ,0 , 65, 75));
     ship.setTexture(this->texture);
 
-    //Change Origin
+    //Change Ship
     ship.setScale(1, 1);
-    ship.setOrigin(ship.getLocalBounds().width / 2, ship.getLocalBounds().height / 2);
+    ship.setOrigin(ship.getLocalBounds().left + ship.getLocalBounds().width / 2,
+                   ship.getLocalBounds().top + ship.getLocalBounds().height / 2);
     ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
     ship.setRotation(0.f);
+
+    shipHitbox.setSize(sf::Vector2f(ship.getGlobalBounds().width * 0.8, ship.getGlobalBounds().height * 0.8));
 }
 
 void Starship::initBullet() 
@@ -93,6 +97,11 @@ void Starship::initBullet()
 
     //Change Origin
     bullet.setOrigin(bullet.getGlobalBounds().width / 2, bullet.getGlobalBounds().height / 2);
+
+    bulletHitbox.setOrigin(bullet.getOrigin());
+    bulletHitbox.setFillColor(sf::Color::Transparent);
+    bulletHitbox.setOutlineThickness(1.f);
+    bulletHitbox.setOutlineColor(sf::Color::Magenta);
 }
 
 
@@ -181,6 +190,11 @@ void Starship::spawnBullet()
     bullet.setRotation(ship.getRotation());
     bullet.setPosition(ship.getPosition().x, ship.getPosition().y);
 
+    bulletHitbox.setRadius(bullet.getGlobalBounds().width / 2 * 0.7);
+    bulletHitbox.setRotation(bullet.getRotation());
+    bulletHitbox.setPosition(bullet.getPosition());
+
+    bulletHitboxes.push_back(bulletHitbox);
     bullets.push_back(bullet);
 }
 
@@ -196,11 +210,11 @@ void Starship::destroyShip()
 
     for(int i = 0; i < enemies.size(); i++)
     {
-        if(ship.getPosition().x > videoMode.width || 
-           ship.getPosition().y > videoMode.height || 
-           ship.getPosition().x <= 0 || 
-           ship.getPosition().y <= 0 || 
-           ship.getGlobalBounds().intersects(enemies[i].getGlobalBounds()))
+        if(shipHitbox.getPosition().x > videoMode.width || 
+           shipHitbox.getPosition().y > videoMode.height || 
+           shipHitbox.getPosition().x <= 0 || 
+           shipHitbox.getPosition().y <= 0 || 
+           shipHitbox.getGlobalBounds().intersects(Hitboxes[i].getGlobalBounds()))
            {
             if(curDestroyTexture < texture.getSize().x * 4)
             {
@@ -233,6 +247,10 @@ void Starship::spreadBullets(sf::Sprite b)
         bullet.setRotation(tempRotation);
         bullet.setPosition(b.getPosition());
 
+        bulletHitbox.setRotation(bullet.getRotation());
+        bulletHitbox.setPosition(bullet.getPosition());
+
+        bulletHitboxes.push_back(bulletHitbox);
         bullets.push_back(bullet);
     }
 }
@@ -242,7 +260,7 @@ void Starship::enemyBulletIntersect()
     for(int i = 0; i < bullets.size(); i++)
         for(int j = 0; j < enemies.size(); j++)
         {
-            if(bullets[i].getGlobalBounds().intersects(enemies[j].getGlobalBounds()))
+            if(bulletHitboxes[i].getGlobalBounds().intersects(Hitboxes[j].getGlobalBounds()))
             {
                 enemiesHealth[j] -= 1;
 
@@ -253,19 +271,33 @@ void Starship::enemyBulletIntersect()
                     enemies.erase(enemies.begin() + j);
                     enemiesInt.erase(enemiesInt.begin() + j);
                     enemiesHealth.erase(enemiesHealth.begin() + j);
+                    Hitboxes.erase(Hitboxes.begin() + j);
                 }
 
                 if(upgradeSpread > 0)
                     spreadBullets(bullets[i]);
 
                 bullets.erase(bullets.begin() + i);
+                bulletHitboxes.erase(bulletHitboxes.begin() + i);
             }
         }
 
 }
+
+void Starship::setShipHitbox()
+{
+
+    shipHitbox.setOrigin(shipHitbox.getLocalBounds().left + shipHitbox.getLocalBounds().width / 2,
+                         shipHitbox.getLocalBounds().top + shipHitbox.getLocalBounds().height / 2);
+    shipHitbox.setRotation(ship.getRotation());
+    shipHitbox.setPosition(ship.getPosition());
+    shipHitbox.setFillColor(sf::Color::Transparent);
+    shipHitbox.setOutlineThickness(1.f);
+    shipHitbox.setOutlineColor(sf::Color::Yellow);
+}
 //Update Stuff
 
-void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp, std::vector<int> eH)
+void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp, std::vector<int> eH, std::vector<sf::CircleShape> Hxs)
 {
     /*
 
@@ -275,6 +307,7 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
     enemiesHealth = eH;
     enemies = enemiesFromCpp;
     enemiesInt = enemiesIntfromCpp;
+    Hitboxes = Hxs;
 
 
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
@@ -297,6 +330,7 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
     } 
 
     destroyShip();
+    setShipHitbox();
 }
 
 void Starship::updateBullet() 
@@ -313,13 +347,18 @@ void Starship::updateBullet()
     {
         //Move Bullets
         bullets[i].scale(1 * upgradeBulletScale, 1 * upgradeBulletScale);
+        bulletHitboxes[i].scale(1 * upgradeBulletScale, 1 * upgradeBulletScale);
+
         bullets[i].setOrigin(bullets[i].getLocalBounds().width / 2, bullets[i].getLocalBounds().height / 2);
+        bulletHitboxes[i].setOrigin(bullets[i].getLocalBounds().width / 2, bullets[i].getLocalBounds().height / 2);
 
         bullets[i].move(sin((bullets[i].getRotation() / 180) * 3.14) / 5 * ElapsedTime, -1 * cos((bullets[i].getRotation() / 180) * 3.14) / 5 * ElapsedTime);
+        bulletHitboxes[i].move(sin((bulletHitboxes[i].getRotation() / 180) * 3.14) / 5 * ElapsedTime, -1 * cos((bulletHitboxes[i].getRotation() / 180) * 3.14) / 5 * ElapsedTime);
 
         //Destroy Bullets outside of screen
         if(bullets[i].getPosition().x > videoMode.width + 30 || bullets[i].getPosition().y > videoMode.height + 30 || bullets[i].getPosition().x <= -30 || bullets[i].getPosition().y <= -30){
             bullets.erase(bullets.begin() + i);
+            bulletHitboxes.erase(bulletHitboxes.begin() + i);
         }
     }       
 
@@ -441,7 +480,7 @@ void Starship::updateUpgrades()
                 case 6:
                     upgradeSmallerShip -= 0.025;
                     ship.scale(upgradeSmallerShip, upgradeSmallerShip);
-                    std::cout << upgradeSmallerShip << "\n";
+                    shipHitbox.scale(upgradeSmallerShip, upgradeSmallerShip);
 
                     if(upgradeSmallerShip < 0.85)
                     {

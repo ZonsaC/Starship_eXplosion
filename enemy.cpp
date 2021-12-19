@@ -21,6 +21,9 @@ Enemy::~Enemy()
 
 void Enemy::initVariables()
 {
+    isHold = false;
+    showHitboxesBool = false;
+
     maxEnemy = 10;
 
     enemySpawnTimer = 0;
@@ -31,12 +34,12 @@ void Enemy::initVariables()
     enemiesHealth.clear();
     enemiesInt.clear();
     enemies.clear();
+    Hitboxes.clear();
 }
 
 void Enemy::initEnemy(){
     texture.loadFromFile("assets/graphics/enemy.png");
     enemy.setTexture(texture);
-    enemy.setPosition(0, -1*enemy.getGlobalBounds().height);
 }
 
 
@@ -53,12 +56,11 @@ void Enemy::spawnEnemy()
     randomEnemyScale = rand() % 100 + 50;
 
     enemy.setScale(randomEnemyScale / 100, randomEnemyScale / 100);
-    enemy.setOrigin(enemy.getGlobalBounds().width / 2, enemy.getGlobalBounds().height / 2);
-    
-    enemySpawnPos = rand() % 4;
-
+    enemy.setOrigin(enemy.getLocalBounds().left + enemy.getLocalBounds().width / 2,
+                    enemy.getLocalBounds().top + enemy.getLocalBounds().height / 2);
 
     //Spawns Enemy
+    enemySpawnPos = rand() % 4;
     switch (enemySpawnPos)
     {
         case 0:
@@ -109,6 +111,18 @@ void Enemy::spawnEnemy()
         enemy.setColor(sf::Color(160, 70, 110));
     }
 
+    //Set Hitbox
+    Hitbox.setRadius(enemy.getGlobalBounds().width / 2 * 0.7);
+    Hitbox.setFillColor(sf::Color::Transparent);
+    Hitbox.setOutlineThickness(1.f);
+    Hitbox.setOutlineColor(sf::Color::Red);
+    Hitbox.setOrigin(Hitbox.getRadius(), Hitbox.getRadius());
+
+    Hitbox.setRotation(enemy.getRotation());
+    Hitbox.setPosition(enemy.getPosition());
+
+
+    Hitboxes.push_back(Hitbox);
     enemiesInt.push_back(enemySpawnPos);
     enemies.push_back(enemy);
 }
@@ -118,6 +132,7 @@ void Enemy::moveEnemies()
     for(int i = 0; i < enemies.size(); i++)
     {
         enemies[i].move(sin((enemies[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime, -1 * cos((enemies[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime);
+        Hitboxes[i].move(sin((Hitboxes[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime, -1 * cos((Hitboxes[i].getRotation() / 180) * 3.14) * 0.05 * ElapsedTime);
     }
 }
 
@@ -132,6 +147,7 @@ void Enemy::destroyEnemies()
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
                 enemiesHealth.erase(enemiesHealth.begin() + i);
+                Hitboxes.erase(Hitboxes.begin() + i);
             }
             break;
         case 1:
@@ -139,6 +155,7 @@ void Enemy::destroyEnemies()
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
                 enemiesHealth.erase(enemiesHealth.begin() + i);
+                Hitboxes.erase(Hitboxes.begin() + i);
             }
             break;
         case 2:
@@ -146,6 +163,7 @@ void Enemy::destroyEnemies()
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
                 enemiesHealth.erase(enemiesHealth.begin() + i);
+                Hitboxes.erase(Hitboxes.begin() + i);
             }
             break;
         case 3:
@@ -153,14 +171,30 @@ void Enemy::destroyEnemies()
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
                 enemiesHealth.erase(enemiesHealth.begin() + i);
+                Hitboxes.erase(Hitboxes.begin() + i);
             }
             break;
         }
     }
 }
 
+void Enemy::showHitboxes()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::H) && !isHold)
+        {
+            isHold = true;
 
-void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int> eI, std::vector<int> eH, int p) 
+            if(showHitboxesBool)
+                showHitboxesBool = false;
+            else
+            if(!showHitboxesBool)
+                showHitboxesBool = true;
+        } else 
+            if(!sf::Keyboard::isKeyPressed(sf::Keyboard::H)) isHold = false;
+}
+
+void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int> eI, std::vector<int> eH, int p, std::vector<sf::CircleShape> Hxs) 
 {
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
@@ -169,6 +203,7 @@ void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int
     enemies = e;
     enemiesInt = eI;
     enemiesHealth = eH;
+    Hitboxes = Hxs;
 
     if(retry)
     {
@@ -187,17 +222,29 @@ void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int
             enemySpawnTimer += 1;
     }
 
-    
+    showHitboxes();
     moveEnemies();
     destroyEnemies();
 }
 
-void Enemy::renderEnemies(sf::RenderTarget& target) 
+void Enemy::renderEnemies(sf::RenderTarget& target, sf::RectangleShape shipHitbox, std::vector<sf::CircleShape> bulletHitboxes) 
 {
-    
     for (auto &i : enemies)
     {
         target.draw(i);
     }
-    
+
+    if(showHitboxesBool)
+    {
+        for (auto &i : Hitboxes)
+        {
+            target.draw(i);
+        }
+        for (auto &i : bulletHitboxes)
+        {
+            target.draw(i);
+        }
+        target.draw(shipHitbox);
+    }
+        
 }

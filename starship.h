@@ -23,6 +23,10 @@ public:
     std::vector<sf::Sprite> enemies;
     std::vector<int> enemiesInt;
     std::vector<int> enemiesHealth;
+    std::vector<sf::CircleShape> Hitboxes;
+    sf::RectangleShape shipHitbox;
+    sf::CircleShape bulletHitbox;
+    std::vector<sf::CircleShape> bulletHitboxes;
 
     std::vector<sf::Sprite> bullets;
 
@@ -32,13 +36,14 @@ public:
     void destroyShip();
     void enemyBulletIntersect();
     void spreadBullets(sf::Sprite);
+    void setShipHitbox();
 
     //Render
     void renderShip(sf::RenderTarget&);
     void renderUpgrades(sf::RenderTarget&);
 
     //Update
-    void updateShip(bool, bool, bool, std::vector<sf::Sprite>, std::vector<int>, std::vector<int>);
+    void updateShip(bool, bool, bool, std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, std::vector<sf::CircleShape>);
     void updateBullet();
     void updateUpgrades();
     void controlShip();
