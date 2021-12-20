@@ -1,6 +1,4 @@
 #include "game.h"
-#include "starship.h"
-
 
 //Private functions
 void Game::initVariables() 
@@ -26,6 +24,7 @@ Game::Game()
     starship = new Starship(window);
     enemy = new Enemy(window);
     screens = new Screens(window);
+    tutorial = new Tutorial(window);
 }
 
 Game::~Game()
@@ -65,6 +64,7 @@ void Game::update()
     //Event polling
     this->pollEvent();
 
+    tutorial->updateTutorial();
     screens->updateScreens(starship->destroyShipBool, starship->points);
     if (!screens->startBool)
     {
@@ -91,13 +91,20 @@ void Game::render()
     //Draw game objects
     this->window->draw(background);
 
-    if (!screens->startBool)
-    {
-    starship->renderShip(*window);
-    enemy->renderEnemies(*window, starship->shipHitbox, starship->bulletHitboxes);
-    } 
+    if(!tutorial->tutorialDone)
+        tutorial->renderTutorial(*window);
 
-    screens->renderScreens(*window);
+    if(tutorial->tutorialDone)
+    {
+        if (!screens->startBool)
+        {
+        starship->renderShip(*window);
+        enemy->renderEnemies(*window, starship->shipHitbox, starship->bulletHitboxes);
+        } 
+
+        screens->renderScreens(*window);
+    }
+    
 
 
     this->window->display();

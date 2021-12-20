@@ -96,6 +96,7 @@ private:
     float acceleration;
     float speedCur;
     float tempRotation;
+    float spreadTempRotation;
     bool ValOk;
     
     //to Test Spreadsystem

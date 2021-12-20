@@ -22,7 +22,6 @@ Enemy::~Enemy()
 void Enemy::initVariables()
 {
     isHold = false;
-    showHitboxesBool = false;
 
     maxEnemy = 10;
 

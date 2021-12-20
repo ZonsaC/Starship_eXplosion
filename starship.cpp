@@ -44,13 +44,13 @@ void Starship::initVariables()
     ValOk = false;
     shipDestroyedAnimation = false;
 
-    bulletSpread = false;
     shieldActive = false;
 
     upgradeChoice = 0;
     points = 0;
     speedCur = 0.f;
     tempRotation = 0.f;
+    spreadTempRotation = 0.f;
     attack = 0.f;
     curDestroyTexture = 0.f;
     rotationSpread = 0.f;
@@ -161,7 +161,6 @@ void Starship::controlShip()
 
         if(attackV){
             attack = 0;
-            points += 5;
             spawnBullet();
         }
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
@@ -267,11 +266,11 @@ void Starship::spreadBullets(sf::Sprite b)
 
     */
 
-    tempRotation = rand() % 360;
+    spreadTempRotation = rand() % 360;
     for(int i = 0; i < upgradeSpread; i++)
     {
         tempRotation += 360 / upgradeSpread;
-        bullet.setRotation(tempRotation);
+        bullet.setRotation(spreadTempRotation);
         bullet.setPosition(b.getPosition());
 
         bulletHitbox.setRotation(bullet.getRotation());

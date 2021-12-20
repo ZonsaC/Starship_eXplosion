@@ -64,11 +64,10 @@ private:
     sf::Sprite startScreen;
     sf::Sprite startButton;
     bool isHeld;
-
     bool isHeld2;
-
     bool isHeld3;
     
+    float curfadeIn;
 
     sf::Texture t_startScreen;
     sf::Texture t_startButton;
@@ -90,6 +89,8 @@ private:
     sf::Text pointsText;
     int points;
 
+
+    void startFadein();
 
     //Inits
     void initVariables();

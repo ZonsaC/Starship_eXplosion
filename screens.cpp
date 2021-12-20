@@ -41,6 +41,7 @@ void Screens::initVariables()
     Hue = 0;
     increaseSpeed = 0.025f;
     curIncSpeed = 0.f;
+    curfadeIn = 0.f;
 }
 
 void Screens::initValues(sf::RenderWindow* pointerWindow)
@@ -157,7 +158,6 @@ void Screens::pollEvent(sf::Event ev)
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !isHeld3)
         {
             isHeld3 = true;
-            std::cout << "awef" << "\n";
             StoreInFile();
 
             initVariables();
@@ -176,6 +176,18 @@ void Screens::StoreInFile()
     f.open(filename, std::ios::app);
     f << points << "            " << username << std::endl;
     f.close();
+}
+
+void Screens::startFadein()
+{
+    if(curfadeIn < 255.f)
+    {
+        curfadeIn += 0.5f;
+
+        startScreen.setColor(sf::Color(255, 255, 255, curfadeIn));
+        startButton.setColor(sf::Color(255, 255, 255, curfadeIn));
+        startText.setFillColor(sf::Color(255, 255, 255, curfadeIn));
+    }
 }
 
 //Update
@@ -256,6 +268,7 @@ void Screens::renderScreens(sf::RenderTarget& target)
     //Start Screen
     if(startBool || reloadBool)
     {
+        startFadein();
         target.draw(startScreen);
         target.draw(startButton);
         target.draw(startText);

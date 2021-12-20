@@ -21,7 +21,7 @@ private:
     float ElapsedTime;
     
     bool isHold;
-    bool showHitboxesBool;
+    bool showHitboxesBool = false;
 
     int points;
     int maxEnemy;

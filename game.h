@@ -12,6 +12,7 @@
 #include "starship.h"
 #include "enemy.h"
 #include "screens.h"
+#include "tutorial.h"
 
 /*
     Class that acts as the game engine.
@@ -24,6 +25,7 @@ private:
     Starship* starship;
     Enemy* enemy;
     Screens* screens;
+    Tutorial* tutorial;
 
     //Private function
     void initVariables();

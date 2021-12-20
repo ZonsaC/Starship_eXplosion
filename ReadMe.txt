@@ -35,7 +35,7 @@ Todo:
         - Collision
     - Partikel
 
-- Hitbox
+- Hitbox                        -- Done
 - Tutorial
 
 
