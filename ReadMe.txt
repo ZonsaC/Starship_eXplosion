@@ -16,8 +16,7 @@ Todo:
         - Faster Attackspeed                    -- Done
         - Autoshoot                             -- Done
         - Faster Movement                       -- Done
-        - Shield
-        - Extra Life
+        - Shield                                -- Done
         - More Bullets on Hit                   -- Done
         - Smaller Ship                          -- Done
         - Bullet increase size while travel     -- Done
@@ -36,7 +35,9 @@ Todo:
     - Partikel
 
 - Hitbox                        -- Done
-- Tutorial
+- Tutorial                      -- Done
+
+- Change Bindings
 
 
 Done: 

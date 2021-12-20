@@ -64,14 +64,17 @@ void Game::update()
     //Event polling
     this->pollEvent();
 
-    tutorial->updateTutorial();
-    screens->updateScreens(starship->destroyShipBool, starship->points);
-    if (!screens->startBool)
+    if(tutorial->tutorialDone)
     {
-        enemy->updateEnemies(screens->retryBool, starship->enemies, starship->enemiesInt, starship->enemiesHealth, starship->points, starship->Hitboxes);
-        starship->updateShip(screens->retryBool, screens->startBool, screens->reloadBool, enemy->enemies, enemy->enemiesInt, enemy->enemiesHealth, enemy->Hitboxes);
+        screens->updateScreens(starship->destroyShipBool, starship->points);
+        if (!screens->startBool)
+        {
+            enemy->updateEnemies(screens->retryBool, starship->enemies, starship->enemiesInt, starship->enemiesHealth, starship->points, starship->Hitboxes);
+            starship->updateShip(screens->retryBool, screens->startBool, screens->reloadBool, enemy->enemies, enemy->enemiesInt, enemy->enemiesHealth, enemy->Hitboxes);
+        }
     }
 
+    tutorial->updateTutorial();
 }
 
 void Game::render() 

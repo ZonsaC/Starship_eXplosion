@@ -55,6 +55,8 @@ void Starship::initVariables()
     curDestroyTexture = 0.f;
     rotationSpread = 0.f;
     ElapsedTime = 0.f;
+    curDeathTexture = 0;
+    enemyDeathDelay = 0.f;
 
     upgradeAttackspeed = 1.f;
     upgradeMovementspeed = 1.f;
@@ -64,7 +66,10 @@ void Starship::initVariables()
     upgrades.clear();
     upgradesInt.clear();
     SperrUpgrade.clear();
+    bullets.clear();
     bulletHitboxes.clear();
+    enemyDeaths.clear();
+    curDeathTextureInt.clear();
 
     //Parameters
     acceleration = 0.000025f; //Speed the Ship Accelerates -- Normal 0.000025f - Fast 0.00005f - Slow 0.00001f
@@ -231,7 +236,7 @@ void Starship::destroyShip()
                 
                 if(curDestroyTexture < texture.getSize().x * 4)
                 {
-                    curDestroyTexture += destroyTextureSpeed * 10;
+                    curDestroyTexture += destroyTextureSpeed * 2;
                     if(static_cast<int>(curDestroyTexture) % 65 == 0)
                     {
                         this->texture.loadFromFile("assets/graphics/starship.png", sf::IntRect(curDestroyTexture ,0 , 65, 75));
@@ -297,6 +302,8 @@ void Starship::enemyBulletIntersect()
                 {
                     points++;
 
+                    enemyDeaths.push_back(enemies[j]);
+                    curDeathTextureInt.push_back(0);
                     enemies.erase(enemies.begin() + j);
                     enemiesInt.erase(enemiesInt.begin() + j);
                     enemiesHealth.erase(enemiesHealth.begin() + j);
@@ -321,6 +328,37 @@ void Starship::setShipHitbox()
     shipHitbox.setOutlineThickness(1.f);
     shipHitbox.setOutlineColor(sf::Color::Yellow);
 }
+
+void Starship::AnimateEnemyDeath()
+{
+
+    if(enemyDeaths.size() != 0)
+    {
+        if(enemyDeathDelay > 2.f)
+        {
+            enemyDeathDelay = 0.f;
+
+            for(int i = 0; i < enemyDeaths.size(); i++)
+            {
+                if(curDeathTextureInt[i] == 870)
+                {
+                    enemyDeaths.erase(enemyDeaths.begin() + i);
+                    curDeathTextureInt.erase(curDeathTextureInt.begin() + i);
+                    break;
+                }
+
+                curDeathTextureInt[i] += 174;
+                enemyDeathTexture.loadFromFile("assets/graphics/enemy.png", sf::IntRect(curDeathTextureInt[i] ,0 , 174, 174));
+                enemyDeaths[i].setTexture(enemyDeathTexture);;
+            }
+        }else
+        {
+            enemyDeathDelay += 1.f;
+        }
+    }
+}
+
+
 //Update Stuff
 
 void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp, std::vector<int> eH, std::vector<sf::CircleShape> Hxs)
@@ -339,6 +377,7 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
+
     enemyBulletIntersect();
 
     if(retry || reload)
@@ -356,6 +395,7 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
         updateUpgrades();
     } 
 
+    AnimateEnemyDeath();
     destroyShip();
     setShipHitbox();
 }
@@ -542,6 +582,10 @@ void Starship::renderShip(sf::RenderTarget& target)
 {
     //Render Bullets
     for(auto &e : this->bullets)
+    {
+        target.draw(e);
+    }
+    for(auto &e : this->enemyDeaths)
     {
         target.draw(e);
     }

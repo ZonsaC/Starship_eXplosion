@@ -47,6 +47,7 @@ public:
     void updateBullet();
     void updateUpgrades();
     void controlShip();
+    void AnimateEnemyDeath();
 
     //Constructor/Destructor
     Starship();
@@ -57,6 +58,12 @@ private:
     //Ship
     sf::Sprite ship;
     sf::Texture texture;
+
+    std::vector<sf::Sprite> enemyDeaths;
+    std::vector<int> curDeathTextureInt;
+    sf::Texture enemyDeathTexture;
+    int curDeathTexture;
+    float enemyDeathDelay;
 
 
     //Bullets

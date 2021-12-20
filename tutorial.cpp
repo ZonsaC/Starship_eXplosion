@@ -73,7 +73,6 @@ void Tutorial::fadein()
             
         }
     }
-    std::cout << curFadein << "\n";
     if(curFadein < 0)
         tutorialDone = true;
 }

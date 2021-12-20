@@ -37,7 +37,7 @@ void Enemy::initVariables()
 }
 
 void Enemy::initEnemy(){
-    texture.loadFromFile("assets/graphics/enemy.png");
+    texture.loadFromFile("assets/graphics/enemy.png", sf::IntRect(0 ,0 , 174, 174));
     enemy.setTexture(texture);
 }
 
