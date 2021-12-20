@@ -36,6 +36,15 @@ void Tutorial::initTutorial()
     tutorialScreen.setTexture(tutorialTexture);
     tutorialScreen.setOrigin(tutorialScreen.getGlobalBounds().width / 2, tutorialScreen.getGlobalBounds().height / 2);
     tutorialScreen.setPosition(videoMode.width / 2, videoMode.height / 2);
+
+    font.loadFromFile("assets/fonts/spaceXrebron.ttf");
+    skipText.setFont(font);
+    skipText.setCharacterSize(30);
+    skipText.setString("skip with space");
+    skipText.setOrigin(skipText.getLocalBounds().left + skipText.getLocalBounds().width,
+                       skipText.getLocalBounds().top + skipText.getLocalBounds().height);
+
+    skipText.setPosition(videoMode.width - 10, videoMode.height - 10);
 }
 
 void Tutorial::windowValues(sf::RenderWindow* window) 
@@ -69,9 +78,18 @@ void Tutorial::fadein()
         tutorialDone = true;
 }
 
+void Tutorial::skipTutorial()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        tutorialDone = true;
+    }
+}
+
 //Update
 void Tutorial::updateTutorial() 
 {
+    skipTutorial();
     fadein();
 }
 
@@ -79,4 +97,5 @@ void Tutorial::updateTutorial()
 void Tutorial::renderTutorial(sf::RenderTarget& target) 
 {
     target.draw(tutorialScreen);
+    target.draw(skipText);
 }

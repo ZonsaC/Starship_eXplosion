@@ -21,6 +21,7 @@ bool tutorialDone;
 void updateTutorial();
 void renderTutorial(sf::RenderTarget& target);
 void fadein();
+void skipTutorial();
 
 private:
 
@@ -34,6 +35,9 @@ bool fadeOut;
 
 sf::Texture tutorialTexture;
 sf::Sprite tutorialScreen;
+
+sf::Font font;
+sf::Text skipText;
 
 void initVariables();
 void initTutorial();
