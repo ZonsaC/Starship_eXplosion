@@ -100,13 +100,13 @@ void Game::render()
 
     if(tutorial->tutorialDone)
     {
+        screens->renderScreens(*window);
+        
         if (!screens->startBool)
         {
         starship->renderShip(*window);
         enemy->renderEnemies(*window, starship->shipHitbox, starship->bulletHitboxes);
-        } 
-
-        screens->renderScreens(*window);
+        }         
     }
     
 

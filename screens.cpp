@@ -213,9 +213,11 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
     {
         reloadBool = false;
         retryBool = false;
+        
+        curIncSpeed = 0.f;
+        Hue = 0;
     }
 
-    updateEndtext();
     updateParallax(ship);
 
     //Leftclick Event
@@ -258,13 +260,14 @@ void Screens::updateEndtext()
     if(Hue < 255 && endBool)
         if(curIncSpeed < 255)
         {
-            curIncSpeed += increaseSpeed * ElapsedTime;
             Hue = round(curIncSpeed);
             endText.setFillColor(sf::Color(255, 255, 255, Hue));
             retryButton.setColor(sf::Color(255, 255, 255, Hue));
             retryText.setFillColor(sf::Color(255, 255, 255, Hue));
             enterUsername.setFillColor(sf::Color(255, 255, 255, Hue));
-        }
+
+            curIncSpeed += increaseSpeed * ElapsedTime;
+        }    
 }
 
 void Screens::updateMousepos()
@@ -281,6 +284,8 @@ void Screens::updateParallax(sf::Sprite ship)
 //Render
 void Screens::renderScreens(sf::RenderTarget& target)
 {
+    
+
     //Start Screen
     if(startBool || reloadBool)
     {
@@ -301,6 +306,8 @@ void Screens::renderScreens(sf::RenderTarget& target)
     //End Screen
     if(endBool && !startBool)
     {
+        updateEndtext();
+
         target.draw(endText);
         target.draw(enterUsername);
         target.draw(retryButton);
