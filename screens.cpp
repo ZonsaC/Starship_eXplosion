@@ -153,7 +153,7 @@ void Screens::pollEvent(sf::Event ev)
     enterUsername.setString("Enter Username: \n" + username);
 
     //Confirm Username
-    if(endBool)
+    if(endBool && !startBool)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !isHeld3)
         {
@@ -190,6 +190,7 @@ void Screens::startFadein()
     }
 }
 
+
 //Update
 void Screens::updateScreens(bool end, int p)
 {
@@ -219,6 +220,7 @@ void Screens::updateScreens(bool end, int p)
             //When mouse is on startButton
             if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
+                endBool = false;
                 startBool = false;
                 
                 username.erase();
@@ -227,6 +229,7 @@ void Screens::updateScreens(bool end, int p)
             //When mouse is on retryButton
             if(retryButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
             {
+                endBool = false;
                 retryBool = true;
             } 
         }
@@ -276,7 +279,7 @@ void Screens::renderScreens(sf::RenderTarget& target)
     
 
     // While Game
-    if(!startBool && !reloadBool && !endBool)
+    if(!startBool && !reloadBool)
     {
         target.draw(pointsText);
     }

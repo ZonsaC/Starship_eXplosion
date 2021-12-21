@@ -94,7 +94,7 @@ void Starship::initShip()
     ship.setPosition(videoMode.width / 2 , videoMode.height / 2);
     ship.setRotation(0.f);
 
-    shipHitbox.setSize(sf::Vector2f(ship.getGlobalBounds().width * 0.8, ship.getGlobalBounds().height * 0.8));
+    shipHitbox.setRadius(ship.getGlobalBounds().width * 0.45);
 }
 
 void Starship::initBullet() 
@@ -224,11 +224,14 @@ void Starship::destroyShip()
 
     for(int i = 0; i < enemies.size(); i++)
     {
+        float dx = Hitboxes[i].getPosition().x - shipHitbox.getPosition().x;
+        float dy = Hitboxes[i].getPosition().y - shipHitbox.getPosition().y;
+
         if(shipHitbox.getPosition().x > videoMode.width || 
            shipHitbox.getPosition().y > videoMode.height || 
            shipHitbox.getPosition().x <= 0 || 
            shipHitbox.getPosition().y <= 0 || 
-           shipHitbox.getGlobalBounds().intersects(Hitboxes[i].getGlobalBounds()) ||
+           std::sqrt((dx * dx) + ( dy * dy)) <= (Hitboxes[i].getRadius()) + (shipHitbox.getRadius()) ||
            shipDestroyedAnimation)
             if(!shieldActive)
             {
@@ -245,6 +248,8 @@ void Starship::destroyShip()
                 }
             destroyShipBool = true;
             }else {
+                enemyDeaths.push_back(enemies[i]);
+                curDeathTextureInt.push_back(0);
                 enemies.erase(enemies.begin() + i);
                 enemiesInt.erase(enemiesInt.begin() + i);
                 enemiesHealth.erase(enemiesHealth.begin() + i);
@@ -291,7 +296,9 @@ void Starship::enemyBulletIntersect()
     for(int i = 0; i < bullets.size(); i++)
         for(int j = 0; j < enemies.size(); j++)
         {
-            if(bulletHitboxes[i].getGlobalBounds().intersects(Hitboxes[j].getGlobalBounds()))
+            float dx = Hitboxes[j].getPosition().x - bulletHitboxes[i].getPosition().x;
+            float dy = Hitboxes[j].getPosition().y - bulletHitboxes[i].getPosition().y;
+            if(std::sqrt((dx * dx) + ( dy * dy)) <= (Hitboxes[j].getRadius()) + (bulletHitboxes[i].getRadius()))
             {
                 enemiesHealth[j] -= 1;
 
@@ -593,8 +600,7 @@ void Starship::renderShip(sf::RenderTarget& target)
     //Render Ship
     target.draw(ship);
 
-    if(!destroyShipBool)
-        renderUpgrades(target);
+    renderUpgrades(target);
 }
 
 void Starship::renderUpgrades(sf::RenderTarget& target)

@@ -24,7 +24,7 @@ public:
     std::vector<int> enemiesInt;
     std::vector<int> enemiesHealth;
     std::vector<sf::CircleShape> Hitboxes;
-    sf::RectangleShape shipHitbox;
+    sf::CircleShape shipHitbox;
     sf::CircleShape bulletHitbox;
     std::vector<sf::CircleShape> bulletHitboxes;
 

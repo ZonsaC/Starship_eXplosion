@@ -226,7 +226,7 @@ void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int
     destroyEnemies();
 }
 
-void Enemy::renderEnemies(sf::RenderTarget& target, sf::RectangleShape shipHitbox, std::vector<sf::CircleShape> bulletHitboxes) 
+void Enemy::renderEnemies(sf::RenderTarget& target, sf::CircleShape shipHitbox, std::vector<sf::CircleShape> bulletHitboxes) 
 {
     for (auto &i : enemies)
     {

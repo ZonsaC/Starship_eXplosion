@@ -59,7 +59,7 @@ public:
     ~Enemy();
     
     void updateEnemies(bool , std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, int, std::vector<sf::CircleShape>);
-    void renderEnemies(sf::RenderTarget& target, sf::RectangleShape, std::vector<sf::CircleShape>);
+    void renderEnemies(sf::RenderTarget& target, sf::CircleShape, std::vector<sf::CircleShape>);
 
 };
 
