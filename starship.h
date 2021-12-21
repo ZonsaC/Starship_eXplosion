@@ -16,6 +16,10 @@ public:
     bool destroyShipBool;
     unsigned points;
 
+    //Ship
+    sf::Sprite ship;
+    sf::Texture texture;
+
     sf::VideoMode videoMode;
     sf::Clock clock;
     float ElapsedTime;
@@ -55,10 +59,6 @@ public:
     ~Starship();
 
 private:
-    //Ship
-    sf::Sprite ship;
-    sf::Texture texture;
-
     std::vector<sf::Sprite> enemyDeaths;
     std::vector<int> curDeathTextureInt;
     sf::Texture enemyDeathTexture;

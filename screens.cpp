@@ -21,6 +21,7 @@ Screens::Screens(sf::RenderWindow* pointerWindow)
     initStarttext();
     initEndscreen();
     initRetrybutton();
+    initParallax();
 }
 
 Screens::~Screens()
@@ -129,6 +130,13 @@ void Screens::initPointstext()
     pointsText.setPosition(10, 0);
 }
 
+void Screens::initParallax()
+{
+    parallaxTexture.loadFromFile("assets/graphics/parallax.png");
+    parallax.setTexture(parallaxTexture);
+    parallax.setOrigin(parallax.getGlobalBounds().width / 2, parallax.getGlobalBounds().height / 2);
+    parallax.setPosition(videoMode.width / 2, videoMode.height / 2);
+}
 
 //Poll Event
 void Screens::pollEvent(sf::Event ev)
@@ -192,7 +200,7 @@ void Screens::startFadein()
 
 
 //Update
-void Screens::updateScreens(bool end, int p)
+void Screens::updateScreens(bool end, int p, sf::Sprite ship)
 {
     //Init when ship is dead
     endBool = end;
@@ -208,6 +216,7 @@ void Screens::updateScreens(bool end, int p)
     }
 
     updateEndtext();
+    updateParallax(ship);
 
     //Leftclick Event
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -263,11 +272,15 @@ void Screens::updateMousepos()
     this->mousePos = sf::Mouse::getPosition(*this->window);
 }
 
+void Screens::updateParallax(sf::Sprite ship)
+{
+    parallax.setPosition(ship.getPosition().x * 0.08, ship.getPosition().y * 0.05);
+}
+
 
 //Render
 void Screens::renderScreens(sf::RenderTarget& target)
 {
-
     //Start Screen
     if(startBool || reloadBool)
     {
@@ -293,5 +306,9 @@ void Screens::renderScreens(sf::RenderTarget& target)
         target.draw(retryButton);
         target.draw(retryText);
     }
+}
 
+void Screens::renderParallax(sf::RenderTarget& target)
+{
+    target.draw(parallax);
 }

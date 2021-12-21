@@ -66,7 +66,7 @@ void Game::update()
 
     if(tutorial->tutorialDone)
     {
-        screens->updateScreens(starship->destroyShipBool, starship->points);
+        screens->updateScreens(starship->destroyShipBool, starship->points, starship->ship);
         if (!screens->startBool)
         {
             enemy->updateEnemies(screens->retryBool, starship->enemies, starship->enemiesInt, starship->enemiesHealth, starship->points, starship->Hitboxes);
@@ -93,6 +93,7 @@ void Game::render()
 
     //Draw game objects
     this->window->draw(background);
+    screens->renderParallax(*window);
 
     if(!tutorial->tutorialDone)
         tutorial->renderTutorial(*window);

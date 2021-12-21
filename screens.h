@@ -36,13 +36,15 @@ public:
     void pollEvent(sf::Event);
 
     //Update
-    void updateScreens(bool, int);
+    void updateScreens(bool, int, sf::Sprite);
     void updateEndtext();
+    void updateParallax(sf::Sprite);
 
     void updateMousepos();
 
     //Render
     void renderScreens(sf::RenderTarget& target);
+    void renderParallax(sf::RenderTarget& target);
 
     
 
@@ -89,6 +91,10 @@ private:
     sf::Text pointsText;
     int points;
 
+    //Parallax
+    sf::Sprite parallax;
+    sf::Texture parallaxTexture;
+
 
     void startFadein();
 
@@ -100,6 +106,7 @@ private:
     void initEndscreen();
     void initRetrybutton();
     void initPointstext();
+    void initParallax();
 
 };
 
