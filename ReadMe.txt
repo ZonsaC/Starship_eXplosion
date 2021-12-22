@@ -1,7 +1,7 @@
 Hey,
 
 Todo:
-- Background parallax
+- Background parallax                           -- Done
 
 - Startscreen                                   -- Done
 
@@ -9,7 +9,7 @@ Todo:
 
 - Score                                         -- Done
 
-- Leaderboard
+- Leaderboard                                   -- Done
 
 - Upgrades
     - Spawning Upgrades
@@ -30,8 +30,8 @@ Todo:
 - Enemies
     - Spawning                  -- Done
     - Explosion                 -- Done
-        - Abschuss
-        - Collision
+        - Abschuss              -- Done
+        - Collision             -- Done
     - Partikel
 
 - Hitbox                        -- Done

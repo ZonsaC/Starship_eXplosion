@@ -350,7 +350,7 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
             }
 
             //When mouse is on retryButton
-            if(retryButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
+            if(retryButton.getGlobalBounds().contains(mousePos.x, mousePos.y) && endBool)
             {
                 endBool = false;
                 retryBool = true;
