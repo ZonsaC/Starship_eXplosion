@@ -43,6 +43,7 @@ void Starship::initVariables()
     attackV = false;
     ValOk = false;
     shipDestroyedAnimation = false;
+    bulletSpawned = false;
 
     shieldActive = false;
 
@@ -160,15 +161,18 @@ void Starship::controlShip()
         attackV = false;
     }
 
+    bulletSpawned = false;
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spawnBulletBool == false || upgradeAutofire)
     {
         spawnBulletBool = true;
-
+        
         if(attackV){
             attack = 0;
+            bulletSpawned = true;
             spawnBullet();
         }
     } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) spawnBulletBool = false;
+
     
     //Breaking
     if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up))

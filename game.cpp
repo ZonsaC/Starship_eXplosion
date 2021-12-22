@@ -67,7 +67,7 @@ void Game::update()
 
     if(tutorial->tutorialDone)
     {
-        audio->updateAudio(screens->startBool, starship->destroyShipBool, screens->retryBool, screens->reloadBool);
+        audio->updateAudio(screens->startBool, starship->destroyShipBool, screens->retryBool, screens->reloadBool, starship->bulletSpawned);
         screens->updateScreens(starship->destroyShipBool, starship->points, starship->ship);
         if (!screens->startBool)
         {

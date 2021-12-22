@@ -16,7 +16,7 @@ public:
     Audio();
     ~Audio();
 
-    void updateAudio(bool, bool, bool, bool);
+    void updateAudio(bool, bool, bool, bool, bool);
 
 private:
 
@@ -24,6 +24,7 @@ private:
     bool endBool;
     bool retryBool;
     bool reloadBool;
+    bool bulletSpawned;
 
     bool playMenu;
     bool playGame;
@@ -31,8 +32,12 @@ private:
     sf::Music menuMusik;
     sf::Music gameMusik;
 
+    sf::Sound shotSound;
+    sf::SoundBuffer buffer;
+
 
     void initMenu();
     void initGame();
+    void initShotShound();
 };
 #endif

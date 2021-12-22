@@ -14,6 +14,7 @@ class Starship
 {
 public:
     bool destroyShipBool;
+    bool bulletSpawned;
     unsigned points;
 
     //Ship
