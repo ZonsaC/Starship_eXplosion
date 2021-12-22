@@ -16,6 +16,7 @@ public:
     bool destroyShipBool;
     bool bulletSpawned;
     unsigned points;
+    unsigned upoints;
 
     //Ship
     sf::Sprite ship;

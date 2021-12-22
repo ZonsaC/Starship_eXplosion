@@ -49,6 +49,7 @@ void Starship::initVariables()
 
     upgradeChoice = 0;
     points = 0;
+    upoints = 0;
     speedCur = 0.f;
     tempRotation = 0.f;
     spreadTempRotation = 0.f;
@@ -63,7 +64,7 @@ void Starship::initVariables()
     upgradeMovementspeed = 1.f;
     upgradeBulletScale = 1.f;
     upgradeSmallerShip = 1.f;
-    upgradeSpread = 0;
+    upgradeSpread = 36;
     upgrades.clear();
     upgradesInt.clear();
     SperrUpgrade.clear();
@@ -283,7 +284,7 @@ void Starship::spreadBullets(sf::Sprite b)
     spreadTempRotation = rand() % 360;
     for(int i = 0; i < upgradeSpread; i++)
     {
-        tempRotation += 360 / upgradeSpread;
+        spreadTempRotation += 360 / upgradeSpread;
         bullet.setRotation(spreadTempRotation);
         bullet.setPosition(b.getPosition());
 
@@ -311,7 +312,19 @@ void Starship::enemyBulletIntersect()
 
                 if(enemiesHealth[j] == 0.f)
                 {
-                    points++;
+                    if(points < 100)
+                    {   
+                        points = points + 1;
+                        upoints = upoints + 1;
+                    } else if(points < 200)
+                    {
+                        points = points + 3;
+                        upoints = upoints + 3; 
+                    } else {
+                        points = points + 5;
+                        upoints = upoints + 5;
+                    }
+                        
 
                     enemyDeaths.push_back(enemies[j]);
                     curDeathTextureInt.push_back(0);
@@ -454,13 +467,15 @@ void Starship::updateUpgrades()
         upgradeShield.setPosition(ship.getPosition());
 
     //Choose Upgrade
-    if(points % 10 != 0)
+    if(upoints < 10)
     {
         isUpgradeSet = true;
     }
-    if(points % 10 == 0 && points != 0 && isUpgradeSet)
+
+    if(upoints >= 10 && points != 0 && isUpgradeSet)
     {
         isUpgradeSet = false;
+        upoints -= 10;
 
         ValOk = false;
         while (!ValOk)

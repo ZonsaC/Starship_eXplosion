@@ -160,6 +160,7 @@ void Screens::initParallax()
 }
 
 
+
 //Poll Event
 void Screens::pollEvent(sf::Event ev)
 {
@@ -340,7 +341,7 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
             updateMousepos();
 
             //When mouse is on startButton
-            if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
+            if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y) && startBool)
             {
                 endBool = false;
                 startBool = false;
