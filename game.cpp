@@ -25,6 +25,7 @@ Game::Game()
     enemy = new Enemy(window);
     screens = new Screens(window);
     tutorial = new Tutorial(window);
+    audio = new Audio();
 }
 
 Game::~Game()
@@ -66,6 +67,7 @@ void Game::update()
 
     if(tutorial->tutorialDone)
     {
+        audio->updateAudio(screens->startBool, starship->destroyShipBool, screens->retryBool, screens->reloadBool);
         screens->updateScreens(starship->destroyShipBool, starship->points, starship->ship);
         if (!screens->startBool)
         {

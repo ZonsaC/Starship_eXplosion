@@ -21,6 +21,7 @@ public:
     bool endBool;
     bool retryBool;
     bool reloadBool;
+    bool leaderboardBool;
 
     // Constructor / Destructor
     Screens();
@@ -30,7 +31,8 @@ public:
     //Functions
     void initValues(sf::RenderWindow*);
     void StoreInFile();
-
+    void LoadFromFile();
+    void LoadLeaderboardValues();
 
     //Poll Event
     void pollEvent(sf::Event);
@@ -39,6 +41,7 @@ public:
     void updateScreens(bool, int, sf::Sprite);
     void updateEndtext();
     void updateParallax(sf::Sprite);
+    
 
     void updateMousepos();
 
@@ -46,7 +49,6 @@ public:
     void renderScreens(sf::RenderTarget& target);
     void renderParallax(sf::RenderTarget& target);
 
-    
 
 private:
     sf::Vector2i mousePos;
@@ -65,6 +67,16 @@ private:
 
     sf::Sprite startScreen;
     sf::Sprite startButton;
+
+    sf::Sprite leaderboardButton;
+    sf::Sprite leaderboard;
+    sf::Text leaderboardUsername;
+    sf::Text leaderboardPoint;
+    std::vector<sf::Text> leaderboardUsernames;
+    std::vector<sf::Text> leaderboardPoints;
+    sf::Text tempText;
+
+
     bool isHeld;
     bool isHeld2;
     bool isHeld3;
@@ -73,6 +85,8 @@ private:
 
     sf::Texture t_startScreen;
     sf::Texture t_startButton;
+    sf::Texture t_leaderboardButton;
+    sf::Texture t_leaderboard;
 
     //Endscreen
     int Hue;
@@ -102,6 +116,7 @@ private:
     void initVariables();
     void initStartscreen();
     void initStartbutton();
+    void initLeaderboard();
     void initStarttext();
     void initEndscreen();
     void initRetrybutton();

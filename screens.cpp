@@ -18,6 +18,7 @@ Screens::Screens(sf::RenderWindow* pointerWindow)
     initVariables();
     initStartscreen();
     initStartbutton();
+    initLeaderboard();
     initStarttext();
     initEndscreen();
     initRetrybutton();
@@ -38,6 +39,7 @@ void Screens::initVariables()
     startBool = true;
     retryBool = false;
     reloadBool = false;
+    leaderboardBool = false;
 
     Hue = 0;
     increaseSpeed = 0.025f;
@@ -71,7 +73,26 @@ void Screens::initStartbutton()
 
     //set origin + pos
     startButton.setOrigin(startButton.getGlobalBounds().width / 2, startButton.getGlobalBounds().height / 2);
-    startButton.setPosition(startScreen.getPosition().x - 305, startScreen.getPosition().y + 200);
+    startButton.setPosition(startScreen.getPosition().x - 310, startScreen.getPosition().y + 200);
+}
+
+void Screens::initLeaderboard()
+{
+    t_leaderboardButton.loadFromFile("assets/graphics/leaderboardButton.png");
+    leaderboardButton.setTexture(t_leaderboardButton);
+    leaderboardButton.setOrigin(leaderboardButton.getGlobalBounds().width / 2, leaderboardButton.getGlobalBounds().height / 2);
+    leaderboardButton.setPosition(startScreen.getPosition().x + 380, startScreen.getPosition().y + 200);
+
+    t_leaderboard.loadFromFile("assets/graphics/leaderboard.png");
+    leaderboard.setTexture(t_leaderboard);
+    leaderboard.setOrigin(leaderboard.getGlobalBounds().width / 2, leaderboard.getGlobalBounds().height / 2);
+    leaderboard.setPosition(videoMode.width / 2, videoMode.height / 2);
+
+    leaderboardUsername.setFont(f_startText);
+    leaderboardUsername.setCharacterSize(50.f);
+
+    leaderboardPoint.setFont(f_startText);
+    leaderboardPoint.setCharacterSize(50.f);
 }
 
 void Screens::initStarttext()
@@ -138,6 +159,7 @@ void Screens::initParallax()
     parallax.setPosition(videoMode.width / 2, videoMode.height / 2);
 }
 
+
 //Poll Event
 void Screens::pollEvent(sf::Event ev)
 {
@@ -169,21 +191,85 @@ void Screens::pollEvent(sf::Event ev)
             StoreInFile();
 
             initVariables();
-            reloadBool = false; 
+            initLeaderboard();
+            reloadBool = false;
             retryBool = true;
         }
 
         if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) isHeld3 = false;
     }
-        
+
 }
 
 void Screens::StoreInFile()
 {
     std::fstream f;
     f.open(filename, std::ios::app);
-    f << points << "            " << username << std::endl;
+    f << points << std::endl;
+    f << username << std::endl;
     f.close();
+}
+
+void Screens::LoadFromFile()
+{
+    leaderboardPoints.clear();
+    leaderboardUsernames.clear();
+
+    std::string line;
+    std::ifstream input(filename);
+
+    int lineCount = 0;
+    while(std::getline(input, line))
+    {
+        lineCount += 1;
+        if(lineCount % 2 != 0)
+        {
+            leaderboardPoint.setString(line);
+            leaderboardPoints.push_back(leaderboardPoint);
+        }
+
+        if(lineCount % 2 == 0)
+        {
+            leaderboardUsername.setString(line);
+            leaderboardUsernames.push_back(leaderboardUsername);
+        }
+    }
+
+    bool sorted = false;
+    while(!sorted)
+    {
+        for(int i = 0; i < leaderboardPoints.size() - 1; i++)
+        {
+            std::string str = leaderboardPoints[i].getString();
+            std::string str2 = leaderboardPoints[i + 1].getString();
+            if(atoi(str.c_str()) < atoi(str2.c_str()))
+            {
+                tempText = leaderboardPoints[i];
+                leaderboardPoints[i] = leaderboardPoints[i + 1];
+                leaderboardPoints[i + 1] = tempText;
+
+                tempText = leaderboardUsernames[i];
+                leaderboardUsernames[i] = leaderboardUsernames[i + 1];
+                leaderboardUsernames[i + 1] = tempText;
+            }
+        }
+
+        for(int i = 0; i < leaderboardPoints.size() - 1; i++)
+        {
+            std::string str = leaderboardPoints[i].getString();
+            std::string str2 = leaderboardPoints[i + 1].getString();
+            if(atoi(str.c_str()) < atoi(str2.c_str()))
+            {
+                sorted = false;
+                break;
+            } else {
+                sorted = true;
+            }
+        }
+        
+
+    }
+
 }
 
 void Screens::startFadein()
@@ -195,9 +281,27 @@ void Screens::startFadein()
         startScreen.setColor(sf::Color(255, 255, 255, curfadeIn));
         startButton.setColor(sf::Color(255, 255, 255, curfadeIn));
         startText.setFillColor(sf::Color(255, 255, 255, curfadeIn));
+        leaderboardButton.setColor(sf::Color(255, 255, 255, curfadeIn));
     }
 }
 
+void Screens::LoadLeaderboardValues()
+{
+    int pos = 0;
+    for(int i = 0; i < leaderboardUsernames.size(); i++)
+    {
+        leaderboardUsernames[i].setPosition(videoMode.width / 2 - 280, videoMode.height / 2 - 350 + pos);
+        pos += 50;
+    }
+
+    pos = 0;
+    for(int i = 0; i < leaderboardUsernames.size(); i++)
+    {
+        leaderboardPoints[i].setOrigin(leaderboardPoints[i].getGlobalBounds().width, 0);
+        leaderboardPoints[i].setPosition(videoMode.width / 2 + 280, videoMode.height / 2 - 350 + pos);
+        pos += 50;
+    }
+}
 
 //Update
 void Screens::updateScreens(bool end, int p, sf::Sprite ship)
@@ -213,7 +317,7 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
     {
         reloadBool = false;
         retryBool = false;
-        
+
         curIncSpeed = 0.f;
         Hue = 0;
     }
@@ -233,7 +337,7 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
             {
                 endBool = false;
                 startBool = false;
-                
+
                 username.erase();
             }
 
@@ -242,16 +346,19 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
             {
                 endBool = false;
                 retryBool = true;
-            } 
-        }
+            }
 
+            if(leaderboardButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
+            {
+                leaderboardBool = true;
+            }
+        }
     } else isHeld = false;
 
 
     std::stringstream ss;
     ss << "Points: " << points;
     pointsText.setString(ss.str());
-
 }
 
 void Screens::updateEndtext()
@@ -267,7 +374,7 @@ void Screens::updateEndtext()
             enterUsername.setFillColor(sf::Color(255, 255, 255, Hue));
 
             curIncSpeed += increaseSpeed * ElapsedTime;
-        }    
+        }
 }
 
 void Screens::updateMousepos()
@@ -284,8 +391,6 @@ void Screens::updateParallax(sf::Sprite ship)
 //Render
 void Screens::renderScreens(sf::RenderTarget& target)
 {
-    
-
     //Start Screen
     if(startBool || reloadBool)
     {
@@ -293,8 +398,21 @@ void Screens::renderScreens(sf::RenderTarget& target)
         target.draw(startScreen);
         target.draw(startButton);
         target.draw(startText);
+        target.draw(leaderboardButton);
+
+        if(leaderboardBool)
+        {
+            target.draw(leaderboard);
+            LoadFromFile();
+            LoadLeaderboardValues();
+            for(int i = 0; i < 14 && i < leaderboardPoints.size(); i++)
+            {
+                target.draw(leaderboardUsernames[i]);
+                target.draw(leaderboardPoints[i]);
+            }
+        }
     }
-    
+
 
     // While Game
     if(!startBool && !reloadBool)
@@ -302,7 +420,7 @@ void Screens::renderScreens(sf::RenderTarget& target)
         target.draw(pointsText);
     }
 
-    
+
     //End Screen
     if(endBool && !startBool)
     {

@@ -13,6 +13,7 @@
 #include "enemy.h"
 #include "screens.h"
 #include "tutorial.h"
+#include "audio.h"
 
 /*
     Class that acts as the game engine.
@@ -26,6 +27,7 @@ private:
     Enemy* enemy;
     Screens* screens;
     Tutorial* tutorial;
+    Audio* audio;
 
     //Private function
     void initVariables();
