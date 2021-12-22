@@ -1,16 +1,6 @@
+Test1
 20
-Zonsa
-49
-Jakob
+Test2
 10
-hallo
-3
-idk
-555
-Boss
-222
-Nicht so Boss
-100
-Keine Ideen mehr
-1
-damn
+Test3
+30

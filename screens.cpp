@@ -203,6 +203,9 @@ void Screens::pollEvent(sf::Event ev)
 
 void Screens::StoreInFile()
 {
+    if(username.size() == 0)
+        username += "Unknown";
+
     std::fstream f;
     f.open(filename, std::ios::app);
     f << points << std::endl;
@@ -221,55 +224,59 @@ void Screens::LoadFromFile()
     int lineCount = 0;
     while(std::getline(input, line))
     {
-        lineCount += 1;
-        if(lineCount % 2 != 0)
+        if(!line.size() == 0)
         {
-            leaderboardPoint.setString(line);
-            leaderboardPoints.push_back(leaderboardPoint);
-        }
+            lineCount += 1;
+            if(lineCount % 2 != 0)
+            {
+                leaderboardPoint.setString(line);
+                leaderboardPoints.push_back(leaderboardPoint);
+            }
 
-        if(lineCount % 2 == 0)
-        {
-            leaderboardUsername.setString(line);
-            leaderboardUsernames.push_back(leaderboardUsername);
+            if(lineCount % 2 == 0)
+            {
+                leaderboardUsername.setString(line);
+                leaderboardUsernames.push_back(leaderboardUsername);
+            }
         }
     }
-
+    
     bool sorted = false;
-    while(!sorted)
-    {
-        for(int i = 0; i < leaderboardPoints.size() - 1; i++)
+    if(leaderboardPoints.size() > 1)
+        if(leaderboardPoints.size() == leaderboardUsernames.size())
         {
-            std::string str = leaderboardPoints[i].getString();
-            std::string str2 = leaderboardPoints[i + 1].getString();
-            if(atoi(str.c_str()) < atoi(str2.c_str()))
+            while(!sorted)
             {
-                tempText = leaderboardPoints[i];
-                leaderboardPoints[i] = leaderboardPoints[i + 1];
-                leaderboardPoints[i + 1] = tempText;
+                for(int i = 0; i < leaderboardPoints.size() - 1; i++)
+                {
+                    std::string str = leaderboardPoints[i].getString();
+                    std::string str2 = leaderboardPoints[i + 1].getString();
+                    if(atoi(str.c_str()) < atoi(str2.c_str()))
+                    {
+                        tempText = leaderboardPoints[i];
+                        leaderboardPoints[i] = leaderboardPoints[i + 1];
+                        leaderboardPoints[i + 1] = tempText;
 
-                tempText = leaderboardUsernames[i];
-                leaderboardUsernames[i] = leaderboardUsernames[i + 1];
-                leaderboardUsernames[i + 1] = tempText;
+                        tempText = leaderboardUsernames[i];
+                        leaderboardUsernames[i] = leaderboardUsernames[i + 1];
+                        leaderboardUsernames[i + 1] = tempText;
+                    }
+                }
+
+                for(int i = 0; i < leaderboardPoints.size() - 1; i++)
+                {
+                    std::string str = leaderboardPoints[i].getString();
+                    std::string str2 = leaderboardPoints[i + 1].getString();
+                    if(atoi(str.c_str()) < atoi(str2.c_str()))
+                    {
+                        sorted = false;
+                        break;
+                    } else {
+                        sorted = true;
+                    }
+                }
             }
-        }
-
-        for(int i = 0; i < leaderboardPoints.size() - 1; i++)
-        {
-            std::string str = leaderboardPoints[i].getString();
-            std::string str2 = leaderboardPoints[i + 1].getString();
-            if(atoi(str.c_str()) < atoi(str2.c_str()))
-            {
-                sorted = false;
-                break;
-            } else {
-                sorted = true;
-            }
-        }
-        
-
-    }
-
+        }  
 }
 
 void Screens::startFadein()
@@ -387,6 +394,11 @@ void Screens::updateParallax(sf::Sprite ship)
     parallax.setPosition(ship.getPosition().x * 0.08, ship.getPosition().y * 0.05);
 }
 
+void Screens::closeLeaderboard()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        leaderboardBool = false;
+}
 
 //Render
 void Screens::renderScreens(sf::RenderTarget& target)
@@ -402,14 +414,18 @@ void Screens::renderScreens(sf::RenderTarget& target)
 
         if(leaderboardBool)
         {
+            closeLeaderboard();
             target.draw(leaderboard);
             LoadFromFile();
             LoadLeaderboardValues();
-            for(int i = 0; i < 14 && i < leaderboardPoints.size(); i++)
+            if(leaderboardPoints.size() == leaderboardUsernames.size())
             {
-                target.draw(leaderboardUsernames[i]);
-                target.draw(leaderboardPoints[i]);
-            }
+                for(int i = 0; i < 14 && i < leaderboardPoints.size(); i++)
+                {
+                    target.draw(leaderboardUsernames[i]);
+                    target.draw(leaderboardPoints[i]);
+                }
+            } else std::cout << "ERROR: POINTS AND USERNAMES ARENT EQUAL!" << std::endl;
         }
     }
 

@@ -111,6 +111,7 @@ private:
 
 
     void startFadein();
+    void closeLeaderboard();
 
     //Inits
     void initVariables();

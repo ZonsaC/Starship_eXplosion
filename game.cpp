@@ -52,10 +52,6 @@ while(this->window->pollEvent(this->ev))
         case sf::Event::Closed:
         this->window->close();
         break;
-        case sf::Event::KeyPressed:
-        if (this->ev.key.code == sf::Keyboard::Escape)
-            this->window->close();
-        break;
         }
     }
 }
