@@ -240,7 +240,7 @@ void Screens::LoadFromFile()
             }
         }
     }
-    
+
     bool sorted = false;
     if(leaderboardPoints.size() > 1)
         if(leaderboardPoints.size() == leaderboardUsernames.size())
