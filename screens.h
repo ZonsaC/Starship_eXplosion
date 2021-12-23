@@ -23,6 +23,7 @@ public:
     bool reloadBool;
     bool leaderboardBool;
 
+    bool close;
     bool pauseBool;
 
     // Constructor / Destructor
@@ -73,6 +74,8 @@ private:
 
     sf::Sprite pause;
     sf::Texture t_pause;
+    sf::Sprite exit;
+    sf::Texture t_exit;
 
     sf::Sprite leaderboardButton;
     sf::Sprite leaderboard;

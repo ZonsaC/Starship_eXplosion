@@ -44,6 +44,7 @@ void Screens::initVariables()
     reloadBool = false;
     leaderboardBool = false;
     pauseBool = false;
+    close = false;
 
     Hue = 0;
     increaseSpeed = 0.025f;
@@ -169,8 +170,12 @@ void Screens::initPause()
     pause.setTexture(t_pause);
     pause.setOrigin(pause.getGlobalBounds().width / 2 , pause.getGlobalBounds().height / 2);
     pause.setPosition(videoMode.width / 2, videoMode.height / 2);
-}
 
+    t_exit.loadFromFile("assets/graphics/exit.png");
+    exit.setTexture(t_exit);
+    exit.setOrigin(exit.getGlobalBounds().width / 2, exit.getGlobalBounds().height / 2);
+    exit.setPosition(videoMode.width / 2 + 225, videoMode.height / 2 + 110);
+}
 
 
 //Poll Event
@@ -327,9 +332,12 @@ void Screens::LoadLeaderboardValues()
     }
 }
 
+
 //Update
 void Screens::updateScreens(bool end, int p, sf::Sprite ship)
 {
+    updateMousepos();
+
     //Init when ship is dead
     endBool = end;
     points = p;
@@ -359,7 +367,6 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
             if(!isHeld)
             {
                 isHeld = true;
-                updateMousepos();
 
                 //When mouse is on startButton
                 if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y) && startBool && !leaderboardBool)
@@ -389,7 +396,12 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
         ss << "Points: " << points;
         pointsText.setString(ss.str());
     }
-    
+
+    if(pauseBool && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        if(exit.getGlobalBounds().contains(mousePos.x, mousePos.y))
+        {
+            window->close();
+        }
 
     updatePause();
 }
@@ -438,6 +450,7 @@ void Screens::closeLeaderboard()
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         leaderboardBool = false;
 }
+
 
 //Render
 void Screens::renderScreens(sf::RenderTarget& target)
@@ -489,7 +502,10 @@ void Screens::renderScreens(sf::RenderTarget& target)
     }
 
     if(pauseBool)
+    {
         target.draw(pause);
+        target.draw(exit);
+    }
 }
 
 void Screens::renderParallax(sf::RenderTarget& target)
