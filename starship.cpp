@@ -385,7 +385,7 @@ void Starship::AnimateEnemyDeath()
 
 //Update Stuff
 
-void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp, std::vector<int> eH, std::vector<sf::CircleShape> Hxs)
+void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<sf::Sprite> enemiesFromCpp, std::vector<int> enemiesIntfromCpp, std::vector<int> eH, std::vector<sf::CircleShape> Hxs, bool pB)
 {
     /*
 
@@ -396,32 +396,38 @@ void Starship::updateShip(bool retry, bool startBool, bool reload, std::vector<s
     enemies = enemiesFromCpp;
     enemiesInt = enemiesIntfromCpp;
     Hitboxes = Hxs;
+    pauseBool = pB;
 
 
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
+    if(pauseBool)
+        ElapsedTime = 0.f;
 
-    enemyBulletIntersect();
-
-    if(retry || reload)
+    if(!pauseBool)
     {
-        initVariables();
-        initBullet(); 
-        initShip();
-        initShield();
+        enemyBulletIntersect();
+
+        if(retry || reload)
+        {
+            initVariables();
+            initBullet(); 
+            initShip();
+            initShield();
+        }
+
+        if(!destroyShipBool)
+        {
+            controlShip();
+            updateBullet();
+            updateUpgrades();
+        } 
+
+        AnimateEnemyDeath();
+        destroyShip();
+        setShipHitbox();
     }
-
-    if(!destroyShipBool)
-    {
-        controlShip();
-        updateBullet();
-        updateUpgrades();
-    } 
-
-    AnimateEnemyDeath();
-    destroyShip();
-    setShipHitbox();
 }
 
 void Starship::updateBullet() 

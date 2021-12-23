@@ -21,6 +21,7 @@ private:
     float ElapsedTime;
     
     bool isHold;
+    bool pauseBool;
     bool showHitboxesBool = false;
 
     int points;
@@ -58,7 +59,7 @@ public:
     Enemy(sf::RenderWindow*);
     ~Enemy();
     
-    void updateEnemies(bool , std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, int, std::vector<sf::CircleShape>);
+    void updateEnemies(bool , std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, int, std::vector<sf::CircleShape>, bool);
     void renderEnemies(sf::RenderTarget& target, sf::CircleShape, std::vector<sf::CircleShape>);
 
 };

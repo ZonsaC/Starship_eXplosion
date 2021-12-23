@@ -23,6 +23,7 @@ Screens::Screens(sf::RenderWindow* pointerWindow)
     initEndscreen();
     initRetrybutton();
     initParallax();
+    initPause();
 }
 
 Screens::~Screens()
@@ -35,11 +36,14 @@ void Screens::initVariables()
 {
     isHeld = false;
     isHeld2 = false;
+    isHeld3 = false;
+    isHeld4 = false;
 
     startBool = true;
     retryBool = false;
     reloadBool = false;
     leaderboardBool = false;
+    pauseBool = false;
 
     Hue = 0;
     increaseSpeed = 0.025f;
@@ -159,46 +163,58 @@ void Screens::initParallax()
     parallax.setPosition(videoMode.width / 2, videoMode.height / 2);
 }
 
+void Screens::initPause()
+{
+    t_pause.loadFromFile("assets/graphics/pause.png");
+    pause.setTexture(t_pause);
+    pause.setOrigin(pause.getGlobalBounds().width / 2 , pause.getGlobalBounds().height / 2);
+    pause.setPosition(videoMode.width / 2, videoMode.height / 2);
+}
+
 
 
 //Poll Event
 void Screens::pollEvent(sf::Event ev)
 {
-    //Enter Username
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !isHeld2 && username.size() > 0)
+    if(!pauseBool)
     {
-        isHeld2 = true;
-        username.erase(username.size() - 1);
-
-    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) isHeld2 = false;
-
-    if(endBool)
-        if (ev.type == sf::Event::TextEntered && !sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+        //Enter Username
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !isHeld2 && username.size() > 0)
         {
-            if (ev.text.unicode < 128)
+            isHeld2 = true;
+            username.erase(username.size() - 1);
+
+        } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) isHeld2 = false;
+
+        if(endBool)
+            if (ev.type == sf::Event::TextEntered && !sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
-                username += (static_cast<char>(ev.text.unicode));
+                if (ev.text.unicode < 128)
+                {
+                    username += (static_cast<char>(ev.text.unicode));
+                }
             }
-        }
 
-    enterUsername.setString("Enter Username: \n" + username);
+        enterUsername.setString("Enter Username: \n" + username);
 
-    //Confirm Username
-    if(endBool && !startBool)
-    {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !isHeld3)
+        //Confirm Username
+        if(endBool && !startBool)
         {
-            isHeld3 = true;
-            StoreInFile();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !isHeld3)
+            {
+                isHeld3 = true;
+                StoreInFile();
 
-            initVariables();
-            initLeaderboard();
-            reloadBool = false;
-            retryBool = true;
+                initVariables();
+                initLeaderboard();
+                reloadBool = false;
+                retryBool = true;
+            }
+
+            if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) isHeld3 = false;
         }
-
-        if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) isHeld3 = false;
     }
+    
 
 }
 
@@ -321,52 +337,61 @@ void Screens::updateScreens(bool end, int p, sf::Sprite ship)
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
-    if(!endBool)
+    if(pauseBool)
+        ElapsedTime = 0.f;
+
+    if(!pauseBool)
     {
-        reloadBool = false;
-        retryBool = false;
-
-        curIncSpeed = 0.f;
-        Hue = 0;
-    }
-
-    updateParallax(ship);
-
-    //Leftclick Event
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-    {
-        if(!isHeld)
+        if(!endBool)
         {
-            isHeld = true;
-            updateMousepos();
+            reloadBool = false;
+            retryBool = false;
 
-            //When mouse is on startButton
-            if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y) && startBool)
-            {
-                endBool = false;
-                startBool = false;
-
-                username.erase();
-            }
-
-            //When mouse is on retryButton
-            if(retryButton.getGlobalBounds().contains(mousePos.x, mousePos.y) && endBool)
-            {
-                endBool = false;
-                retryBool = true;
-            }
-
-            if(leaderboardButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
-            {
-                leaderboardBool = true;
-            }
+            curIncSpeed = 0.f;
+            Hue = 0;
         }
-    } else isHeld = false;
+
+        updateParallax(ship);
+
+        //Leftclick Event
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            if(!isHeld)
+            {
+                isHeld = true;
+                updateMousepos();
+
+                //When mouse is on startButton
+                if(startButton.getGlobalBounds().contains(mousePos.x, mousePos.y) && startBool && !leaderboardBool)
+                {
+                    endBool = false;
+                    startBool = false;
+
+                    username.erase();
+                }
+
+                //When mouse is on retryButton
+                if(retryButton.getGlobalBounds().contains(mousePos.x, mousePos.y) && endBool)
+                {
+                    endBool = false;
+                    retryBool = true;
+                }
+
+                if(leaderboardButton.getGlobalBounds().contains(mousePos.x, mousePos.y))
+                {
+                    leaderboardBool = true;
+                }
+            }
+        } else isHeld = false;
 
 
-    std::stringstream ss;
-    ss << "Points: " << points;
-    pointsText.setString(ss.str());
+        std::stringstream ss;
+        ss << "Points: " << points;
+        pointsText.setString(ss.str());
+    }
+    
+
+    updatePause();
 }
 
 void Screens::updateEndtext()
@@ -395,6 +420,19 @@ void Screens::updateParallax(sf::Sprite ship)
     parallax.setPosition(ship.getPosition().x * 0.08, ship.getPosition().y * 0.05);
 }
 
+void Screens::updatePause()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !leaderboardBool && !isHeld4)
+    {
+        isHeld4 = true;
+        if(pauseBool)
+            pauseBool = false;
+            else
+            pauseBool = true;
+
+    } else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) isHeld4 = false;
+}
+
 void Screens::closeLeaderboard()
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -403,7 +441,7 @@ void Screens::closeLeaderboard()
 
 //Render
 void Screens::renderScreens(sf::RenderTarget& target)
-{
+{ 
     //Start Screen
     if(startBool || reloadBool)
     {
@@ -429,6 +467,7 @@ void Screens::renderScreens(sf::RenderTarget& target)
             } else std::cout << "ERROR: POINTS AND USERNAMES ARENT EQUAL!" << std::endl;
         }
     }
+        
 
 
     // While Game
@@ -448,6 +487,9 @@ void Screens::renderScreens(sf::RenderTarget& target)
         target.draw(retryButton);
         target.draw(retryText);
     }
+
+    if(pauseBool)
+        target.draw(pause);
 }
 
 void Screens::renderParallax(sf::RenderTarget& target)

@@ -23,6 +23,8 @@ public:
     bool reloadBool;
     bool leaderboardBool;
 
+    bool pauseBool;
+
     // Constructor / Destructor
     Screens();
     Screens(sf::RenderWindow*);
@@ -41,6 +43,7 @@ public:
     void updateScreens(bool, int, sf::Sprite);
     void updateEndtext();
     void updateParallax(sf::Sprite);
+    void updatePause();
     
 
     void updateMousepos();
@@ -68,6 +71,9 @@ private:
     sf::Sprite startScreen;
     sf::Sprite startButton;
 
+    sf::Sprite pause;
+    sf::Texture t_pause;
+
     sf::Sprite leaderboardButton;
     sf::Sprite leaderboard;
     sf::Text leaderboardUsername;
@@ -80,6 +86,7 @@ private:
     bool isHeld;
     bool isHeld2;
     bool isHeld3;
+    bool isHeld4;
     
     float curfadeIn;
 
@@ -123,6 +130,7 @@ private:
     void initRetrybutton();
     void initPointstext();
     void initParallax();
+    void initPause();
 
 };
 

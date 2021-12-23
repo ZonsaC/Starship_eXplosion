@@ -49,7 +49,7 @@ public:
     void renderUpgrades(sf::RenderTarget&);
 
     //Update
-    void updateShip(bool, bool, bool, std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, std::vector<sf::CircleShape>);
+    void updateShip(bool, bool, bool, std::vector<sf::Sprite>, std::vector<int>, std::vector<int>, std::vector<sf::CircleShape>, bool);
     void updateBullet();
     void updateUpgrades();
     void controlShip();
@@ -107,6 +107,7 @@ private:
     float tempRotation;
     float spreadTempRotation;
     bool ValOk;
+    bool pauseBool;
     
     //to Test Spreadsystem
     bool isHold2 = false;

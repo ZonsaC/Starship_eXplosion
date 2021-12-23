@@ -193,37 +193,45 @@ void Enemy::showHitboxes()
             if(!sf::Keyboard::isKeyPressed(sf::Keyboard::H)) isHold = false;
 }
 
-void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int> eI, std::vector<int> eH, int p, std::vector<sf::CircleShape> Hxs) 
+void Enemy::updateEnemies(bool retry, std::vector<sf::Sprite> e, std::vector<int> eI, std::vector<int> eH, int p, std::vector<sf::CircleShape> Hxs, bool pB) 
 {
     ElapsedTime = clock.getElapsedTime().asMicroseconds() * 0.007;
     clock.restart();
 
+    pauseBool = pB;
     points = p;
     enemies = e;
     enemiesInt = eI;
     enemiesHealth = eH;
     Hitboxes = Hxs;
 
-    if(retry)
-    {
-        initVariables();
-        initEnemy();
-    }
-        
+    if(pauseBool)
+        ElapsedTime = 0.f;
 
-    if (enemies.size() < maxEnemy)
+    if(!pauseBool)
     {
-        if (enemySpawnTimer * ElapsedTime >= enemySpawnTimerMax)
+        if(retry)
         {
-            spawnEnemy();
-            enemySpawnTimer = 0;
-        }else
-            enemySpawnTimer += 1;
-    }
+            initVariables();
+            initEnemy();
+        }
+            
 
-    showHitboxes();
-    moveEnemies();
-    destroyEnemies();
+        if (enemies.size() < maxEnemy)
+        {
+            if (enemySpawnTimer * ElapsedTime >= enemySpawnTimerMax)
+            {
+                spawnEnemy();
+                enemySpawnTimer = 0;
+            }else
+                enemySpawnTimer += 1;
+        }
+
+        showHitboxes();
+        moveEnemies();
+        destroyEnemies();
+    }
+    
 }
 
 void Enemy::renderEnemies(sf::RenderTarget& target, sf::CircleShape shipHitbox, std::vector<sf::CircleShape> bulletHitboxes) 
